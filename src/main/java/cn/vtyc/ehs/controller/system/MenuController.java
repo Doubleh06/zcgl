@@ -98,7 +98,7 @@ public class MenuController extends BaseController {
     @RequestMapping("/delete")
     @ResponseBody
     public Result delete(@RequestParam Integer id) {
-        menuService.deleteLogically(id);
+        menuService.deleteMenu(id);
         return OK;
     }
 }

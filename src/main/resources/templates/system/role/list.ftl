@@ -48,6 +48,7 @@
                                     <button class="control-auth btn btn-primary" data-auth="role_create" onclick="Role.create()">新增</button>
                                 </div>
                             </div>
+                        </div>
                             <div class="jqGrid_wrapper">
                             <#--jqgrid 表格栏-->
                                 <table id="grid-table"></table>

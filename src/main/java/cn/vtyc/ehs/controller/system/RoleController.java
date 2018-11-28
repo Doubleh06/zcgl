@@ -78,7 +78,7 @@ public class RoleController extends BaseController {
     @RequestMapping("/delete")
     @ResponseBody
     public Result delete(@RequestParam Integer id) {
-        roleService.deleteLogically(id);
+        roleService.deleteRole(id);
         return OK;
     }
 

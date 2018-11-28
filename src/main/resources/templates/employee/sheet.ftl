@@ -148,8 +148,8 @@
             url: "/employee/uploadFile?uuid=${uuid}", //必须填写
             method: "post",  //也可用put
             paramName: "files", //默认为file
-            maxFiles: 10,//一次性上传的文件数量上限
-            maxFilesize: 20, //MB
+            maxFiles: 5,//一次性上传的文件数量上限
+            maxFilesize: 100, //MB
             acceptedFiles: ".jpg,.png,.jpeg", //上传的类型
             parallelUploads: 3,
             addRemoveLinks: true,

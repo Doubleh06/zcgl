@@ -31,8 +31,8 @@ Menu.initColumn = function () {
         {title: '操作', field: 'operation', align: 'center', valign: 'middle', sortable: true,  formatter: function(cellValue, rowObject) {
             var id = rowObject["id"];
             var str = "";
-            str += '<input type="button" class="btn btn-sm btn-info" value="编辑" onclick="Menu.edit(' + id + ')"/>&nbsp;';
-            str += '<input type="button" class="btn btn-sm btn-danger" value="删除" onclick="Menu.delete(' + id + ')"/>';
+            str += '<input type="button" class="control-auth btn btn-sm btn-info" data-auth="menu_edit" value="编辑" onclick="Menu.edit(' + id + ')"/>&nbsp;';
+            str += '<input type="button" class="control-auth btn btn-sm btn-danger" data-auth="menu_delete" value="删除" onclick="Menu.delete(' + id + ')"/>';
             return str;
         }}
     ];

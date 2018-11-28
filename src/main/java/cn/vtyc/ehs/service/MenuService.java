@@ -6,7 +6,9 @@ import cn.vtyc.ehs.core.AbstractService;
 import cn.vtyc.ehs.core.BaseDao;
 import cn.vtyc.ehs.core.jqGrid.JqGridParam;
 import cn.vtyc.ehs.dao.MenuDao;
+import cn.vtyc.ehs.dao.RoleMenuDao;
 import cn.vtyc.ehs.entity.Menu;
+import cn.vtyc.ehs.entity.RoleMenu;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,6 +23,8 @@ public class MenuService extends AbstractService<Menu> {
 
     @Resource
     private MenuDao menuDao;
+    @Resource
+    private RoleMenuDao roleMenuDao;
 
     @Override
     protected BaseDao<Menu> getDao() {
@@ -42,5 +46,14 @@ public class MenuService extends AbstractService<Menu> {
 
     public List<Menu> selectAllEnabledByUser(Integer userId) {
         return menuDao.selectAllEnabledByUser(userId);
+    }
+
+    public void deleteMenu(Integer id){
+        Menu menu = new Menu();
+        menu.setId(id);
+        menuDao.delete(menu);
+        RoleMenu roleMenu = new RoleMenu();
+        roleMenu.setMenuId(id);
+        roleMenuDao.delete(roleMenu);
     }
 }

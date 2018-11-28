@@ -82,21 +82,13 @@ public class UserController extends BaseController {
         user.setEnable(true);
         userService.insert(user);
 
-        //如果权限是管理员的话就不要设置对应的公司
-        if(!dto.getPermission().equals("option1")){
-//            UserCompany uc = new UserCompany();
-//            uc.setCompanyId(dto.getCompany());
-//            uc.setUserId(user.getId());
-//            userCompanyDao.insert(uc);
-        }
-
         return OK;
     }
 
     @RequestMapping("/delete")
     @ResponseBody
     public Result delete(@RequestParam Integer id) {
-        userService.deleteLogically(id);
+        userService.deleteUser(id);
         return OK;
     }
 
@@ -117,13 +109,6 @@ public class UserController extends BaseController {
     public Result update(@Valid @RequestBody UserDto dto) {
         User user = DtoTransfer.userDto2Entity(dto);
         userService.updateSelective(user);
-        //如果权限是管理员的话就不要设置对应的公司
-//        UserCompany uc = new UserCompany();
-        if(!dto.getPermission().equals("option3")){
-//            userCompanyDao.updateUserCompany(user.getId(),dto.getCompany());
-        }else{
-//            userCompanyDao.updateUserCompany(user.getId(),null);
-        }
         return OK;
     }
 

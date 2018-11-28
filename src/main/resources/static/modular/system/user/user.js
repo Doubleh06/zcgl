@@ -89,9 +89,8 @@ User.insert = function () {
  * 编辑弹框
  */
 User.edit = function (id) {
-    $("#selectCompany2").hide();
     $.ajax({
-        url: "/user/getJoinUserCompany?id=" + id,
+        url: "/user/get?id=" + id,
         type: 'GET',
         dataType: "json",
         success: function (r) {
@@ -101,16 +100,6 @@ User.edit = function (id) {
                 form.find("input[name='username']").val(user.username);
                 form.find("input[name='nickname']").val(user.nickname);
                 form.find("input[name='id']").val(user.id);
-                if(null==user.company||""==user.company){
-                    form.find("input[id='radio3']").prop("checked",true);
-                }else{
-                    $("#selectCompany2").show();
-                    form.find("input[id='radio4']").prop("checked",true);
-                    var selected = form.find("select[name='company2']").find("option[value='"+user.company+"']").html();
-                    form.find("select[name='company2']").val(user.company);
-                    $(".chosen-single").find("span").html(selected);
-                    // $("#selectCompany2").trigger("chosen:updated");
-                    }
                 $("#editModal").modal();
             }
         }
@@ -126,13 +115,6 @@ User.update = function () {
     user.id = form.find("input[name='id']").val()
     user.username =  form.find("input[name='username']").val();
     user.nickname =  form.find("input[name='nickname']").val();
-    user.permission =  form.find("input[name='permission2']:checked").val();
-    if(user.permission=="option3"){
-        user.company = null;
-    }else{
-        user.company =  form.find("select[name='company2']").val();
-    }
-    // console.log(user);
     $.ajax({
         url: "/user/update",
         type: 'POST',

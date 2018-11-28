@@ -47,11 +47,8 @@
                                         <input type="text" placeholder="昵称" id="nickname" class="form-control">
                                     </div>
                                     <button class="btn btn-success" type="button" onclick="User.search()">搜索</button>
-                                    <button class="btn btn-success" type="button" onclick="User.resetSearch()">重置
-                                    </button>
-                                    <button class="control-auth btn btn-primary" data-auth="user_create"
-                                            onclick="User.create()">新增
-                                    </button>
+                                    <button class="btn btn-success" type="button" onclick="User.resetSearch()">重置</button>
+                                    <button class="control-auth btn btn-primary" data-auth="user_create" onclick="User.create()">新增</button>
                                     <#--<select class="chosen-select"  tabindex="2">-->
                                         <#--<option value="">Select</option>-->
                                         <#--<option value="United States">United States</option>-->
@@ -62,6 +59,7 @@
                                     <#--</select>-->
                                 </div>
                             </div>
+                        </div>
                         <#--<div class="bar operate-bar">
                             <button class="btn btn-sm btn-primary" onclick="User.allocateRoleModal()">授权</button>
                             <button class="btn btn-sm btn-info" onclick="User.edit()">编辑</button>
@@ -104,18 +102,6 @@
                             <input type="text" class="form-control" name="nickname">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="radio1" class="col-sm-2 control-label">
-                            管理员
-                        </label>
-                        <input type="radio" name="permission" id="radio1" value="option1" checked=""  class="col-sm-4">
-
-                        <label for="radio2" class="col-sm-2 control-label">
-                            企业用户
-                        </label>
-                        <input type="radio" name="permission" id="radio2" value="option2" class="col-sm-4">
-
-                    </div>
 
                 </form>
 
@@ -150,18 +136,6 @@
                             <input type="text" class="form-control" name="nickname">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="radio1" class="col-sm-2 control-label">
-                            管理员
-                        </label>
-                        <input type="radio" name="permission2" id="radio3" value="option3" checked=""  class="col-sm-4">
-
-                        <label for="radio2" class="col-sm-2 control-label">
-                            企业用户
-                        </label>
-                        <input type="radio" name="permission2" id="radio4" value="option4" class="col-sm-4">
-
-                    </div>
 
                 </form>
 
@@ -184,7 +158,7 @@
                 <h4 class="modal-title" id="modalTitle">分配角色</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="edit-form">
+                <form class="form-horizontal" id="">
                     <input type="hidden" id="userId" name="userId">
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
@@ -199,7 +173,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-primary" onclick="User.saveRoles()">确定</button>
                 <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>
-
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
