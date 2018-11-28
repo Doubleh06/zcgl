@@ -89,7 +89,7 @@ public class EmployeeApplyController extends BaseController {
             imageList.add(image);
         }
         imageDao.insertList(imageList);
-
+        System.out.println("=====================================================");
         String subImgsString= StringUtils.join(subImgs.toArray(), ",");
         return new JSONResult(subImgsString);
     }
