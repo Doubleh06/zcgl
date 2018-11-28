@@ -24,6 +24,7 @@
 <script type="text/javascript" src="/static/js/plugins/blockui/jquery.blockUI.js"></script>
 <#--dateformat-->
 <script type="text/javascript" src="/static/js/plugins/dateformat/dateformat-min.js"></script>
+<script type="text/javascript" src="/static/js/fileplugin.js"></script>
 <script type="text/javascript" src="/static/js/cti.js"></script>
 
 

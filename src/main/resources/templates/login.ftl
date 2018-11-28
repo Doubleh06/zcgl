@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>外呼管理系统</title>
+    <title>EHS系统</title>
 
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -27,16 +27,8 @@
     <div class="loginColumns animated fadeInDown">
         <div class="row">
 
-            <#--<div class="col-md-6">-->
-                <#--<h2 class="font-bold">数赢云外呼管理系统</h2>-->
-
-               <#--&lt;#&ndash; <p>-->
-                <#--Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.-->
-                <#--</p>&ndash;&gt;-->
-
-            <#--</div>-->
             <div class="col-md-12">
-                <h2 class="font-bold titleBox">数赢云外呼管理系统</h2>
+                <h2 class="font-bold titleBox">大茂EHS管理系统</h2>
                 <div class="ibox-content">
                     <form class="m-t" role="form" action="/j_spring_security_check" method="post">
                         <div class="form-group">

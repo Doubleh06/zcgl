@@ -12,18 +12,12 @@ User.initOptions = function () {
     var options = {
         url : "/user/grid",
         autowidth:true,
-        colNames: ['编号', '用户名', '昵称','用户类型', '操作'],//
+        colNames: ['编号', '用户名', '昵称', '操作'],//
         colModel: [
             {name: 'id', index: 'id', width: 60, sorttype: "int"},
             {name: 'username', index: 'username', width: 90},
             {name: 'nickname', index: 'nickname', width: 100, sortable: false},
-            {name: 'usertype', index: 'usertype', width: 100, sortable: false,formatter:function(cellvar){
-                if(cellvar==null||cellvar==""){
-                    return "管理员";
-                }else{
-                    return "企业用户";
-                }
-                }},
+
             {name: 'operations', index: 'operations', width: 100, sortable: false, formatter: function (cellValue, options, rowObject) {
                 var id = rowObject["id"];
                 var str = "";

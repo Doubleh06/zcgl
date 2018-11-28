@@ -5,7 +5,7 @@
         </div>
         <ul class="nav navbar-top-links navbar-right">
             <li>
-                <span class="m-r-sm text-muted welcome-message">Welcome to 数赢外呼管理系统.</span>
+                <span class="m-r-sm text-muted welcome-message">Welcome to 大茂EHS管理系统!</span>
             </li>
 
             <li>

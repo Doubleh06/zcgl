@@ -3,6 +3,6 @@
         10GB of <strong>250GB</strong> Free.
     </div>-->
     <div>
-        <strong>Copyright</strong> 数赢云 © 2018-2018
+        <strong>大茂伟瑞柯车灯有限公司</strong>
     </div>
 </div>
