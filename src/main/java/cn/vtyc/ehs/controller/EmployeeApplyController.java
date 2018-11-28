@@ -59,7 +59,6 @@ public class EmployeeApplyController extends BaseController {
         for (Image image : imageList){
             imgUrl += image.getImgName()+"^"+image.getImgSourceName()+"|";
         }
-        System.out.println("----------------------------------------------------------");
         Ehs ehs = new Ehs();
         BeanUtils.copyProperties(ehsDto, ehs);
         String date = ehsDto.getDate();
