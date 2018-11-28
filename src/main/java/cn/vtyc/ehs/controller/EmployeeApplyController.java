@@ -59,7 +59,7 @@ public class EmployeeApplyController extends BaseController {
         for (Image image : imageList){
             imgUrl += image.getImgName()+"^"+image.getImgSourceName()+"|";
         }
-
+        System.out.println("----------------------------------------------------------");
         Ehs ehs = new Ehs();
         BeanUtils.copyProperties(ehsDto, ehs);
         String date = ehsDto.getDate();
@@ -89,7 +89,6 @@ public class EmployeeApplyController extends BaseController {
             imageList.add(image);
         }
         imageDao.insertList(imageList);
-        System.out.println("=====================================================");
         String subImgsString= StringUtils.join(subImgs.toArray(), ",");
         return new JSONResult(subImgsString);
     }
