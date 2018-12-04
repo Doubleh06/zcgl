@@ -11,8 +11,8 @@ import lombok.Data;
 @Data
 public class EhsJqGridParam extends JqGridParam {
 
-    private String accident_man;
+    private String accidentMan;
     private Integer dept ;
-    private Integer accident_type;
+    private Integer accidentType;
 
 }

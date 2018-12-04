@@ -41,7 +41,7 @@
                             <div class="bar search-bar">
                                 <div class="form-inline">
                                     <div class="form-group">
-                                        <label>事故人员</label>
+                                        <label>涉及人员</label>
                                         <input type="text" class="form-control" id="accidentMan" style="width: 150px;">
                                         &nbsp&nbsp&nbsp
                                         <label>部门</label>

@@ -53,14 +53,14 @@ public class EhsService extends AbstractService<Ehs> {
     public PageInfo<Map> selectByJqGridParam(EhsJqGridParam param ){
         StringBuilder sql = new StringBuilder();
         sql.append(" where 1 = 1 ");
-        if(StringUtils.isNotEmpty(param.getAccident_man())){
-            sql.append(" and accident_man like '%").append(param.getAccident_man()).append("%'");
+        if(StringUtils.isNotEmpty(param.getAccidentMan())){
+            sql.append(" and accident_man like '%").append(param.getAccidentMan()).append("%'");
         }
         if(null!=param.getDept()){
             sql.append(" and dept = ").append(param.getDept());
         }
-        if(null!=param.getAccident_type()){
-            sql.append(" and accident_type = ").append(param.getAccident_type());
+        if(null!=param.getAccidentType()){
+            sql.append(" and accident_type = ").append(param.getAccidentType());
         }
         //获取部门信息
         List<Deptment> deptmentList = deptmentDao.selectAll();
