@@ -1,16 +1,16 @@
-var Manager = {
+var Backstage = {
     tableId: "#grid-table",
     pagerId: "#grid-pager",
     table: null,
-    domain: "manager"
+    domain: "backstage"
 };
 
 /**
  * jqGrid初始化参数
  */
-Manager.initOptions = function () {
+Backstage.initOptions = function () {
     var options = {
-        url : "/manager/grid",
+        url : "/backstage/grid",
         autowidth:true,
         colNames: ['编号','事故类型', '涉及人员',"人员所在部门/人员接待部门", '事发地点','事发时间','事故情况','汇报人','操作'],
         colModel: [
@@ -29,12 +29,16 @@ Manager.initOptions = function () {
             {name: 'accident_situation', index: 'accident_situation', width: 200, sortable: false},
             {name: 'report_man', index: 'report_man', width: 60, sortable: false},
             {name: 'operations', index: 'operations', width: 100, sortable: false, formatter: function (cellValue, options, rowObject) {
+                var imgUrl = rowObject["img_url"];
+
                 var id = "'"+rowObject["id"]+"'";
                 var str = "";
-                str += '<input type="button" class=" btn btn-sm btn-info"  value="照片查看" onclick="Manager.photos(' + id + ')"/>&nbsp;';
-                str += '<input type="button" class=" btn btn-sm btn-warning"  value="删  除" onclick="Manager.delete(' + id + ')"/>&nbsp;';
-                // str += '<input type="button" class=" btn btn-sm btn-info"  value="编辑" onclick="Manager.edit(' + id + ')"/>&nbsp;';
-                // str += '<input type="button" class=" btn btn-sm btn-danger"  value="删除" onclick="Manager.delete(' + id + ')"/>';
+                if(""!=imgUrl&&null!=imgUrl){
+                    str += '<input type="button" class=" btn btn-sm btn-info"  value="照片查看" onclick="Backstage.photos(' + id + ')"/>&nbsp;';
+                }
+                str += '<input type="button" class=" btn btn-sm btn-warning"  value="删  除" onclick="Backstage.delete(' + id + ')"/>&nbsp;';
+                // str += '<input type="button" class=" btn btn-sm btn-info"  value="编辑" onclick="Backstage.edit(' + id + ')"/>&nbsp;';
+                // str += '<input type="button" class=" btn btn-sm btn-danger"  value="删除" onclick="Backstage.delete(' + id + ')"/>';
                 return str;
             }}
         ]
@@ -45,42 +49,42 @@ Manager.initOptions = function () {
 /**
  * 根据关键词搜索
  */
-Manager.search = function () {
+Backstage.search = function () {
     var searchParam = {};
     searchParam.accidentMan = $("#accidentMan").val();
     searchParam.dept = $("#dept").val();
     searchParam.accidentType = $("#accidentType").val();
     console.log(searchParam);
-    Manager.table.reload(searchParam);
+    Backstage.table.reload(searchParam);
 };
 
 /**
  * 重置搜索
  */
-Manager.resetSearch = function () {
+Backstage.resetSearch = function () {
     // $("#task").val("");
     // $("#deptmentId").html("请选择");
     // $("#userId").html("请选择");
-    // Manager.search();
-    window.location.href = "/manager/list";
+    // Backstage.search();
+    window.location.href = "/backstage/list";
 };
 
 /**
  *新增
  */
-Manager.create = function () {
+Backstage.create = function () {
     window.location.href = "/createDemand/create";
 }
 /**
  * 导出
  */
-Manager.export = function () {
-    window.location.href = "/manager/export";
+Backstage.export = function () {
+    window.location.href = "/backstage/export";
 
     // $("#exportModal").modal();
     // $.ajax({
     //     type : 'POST',
-    //     url: '/Manager/export',
+    //     url: '/Backstage/export',
     //     contentType : "application/json" ,
     //     // data : JSON.stringify({
     //     //     "keys" : keys
@@ -98,11 +102,11 @@ Manager.export = function () {
  *
  * @param id    userId
  */
-Manager.delete = function del(id) {
+Backstage.delete = function del(id) {
     warning("确定删除吗", "", function () {
-        $.get("/manager/delete?id=" + id, function () {
+        $.get("/backstage/delete?id=" + id, function () {
             success("成功删除");
-            Manager.search();
+            Backstage.search();
         });
     })
 };
@@ -112,8 +116,8 @@ Manager.delete = function del(id) {
  *
  * @param id    userId
  */
-Manager.photos = function (id) {
-    window.location.href = "/manager/photos?id="+id;
+Backstage.photos = function (id) {
+    window.location.href = "/backstage/photos?id="+id;
 };
 
 
@@ -139,7 +143,7 @@ Manager.photos = function (id) {
 
 $(function() {
     $('.chosen-select').chosen({width: "100%"});
-    var jqGrid = new JqGrid("#grid-table", "#grid-pager", Manager.initOptions());
-    Manager.table = jqGrid.init();
+    var jqGrid = new JqGrid("#grid-table", "#grid-pager", Backstage.initOptions());
+    Backstage.table = jqGrid.init();
 
 });

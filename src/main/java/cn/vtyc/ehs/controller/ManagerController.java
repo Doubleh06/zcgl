@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "/manager")
+@RequestMapping(value = "/backstage")
 public class ManagerController extends BaseController {
 
     @Autowired
@@ -45,10 +45,10 @@ public class ManagerController extends BaseController {
 
     @RequestMapping(value = "list")
     public String list(Model model){
-        model.addAttribute("menus", getMenus("manager"));
+        model.addAttribute("menus", getMenus("backstage"));
         model.addAttribute("depts",deptmentDao.selectAll());
         model.addAttribute("accidentTypes",accidentTypeDao.selectAll());
-        return "/manager/list";
+        return "/backstage/list";
     }
 
     @RequestMapping(value = "/grid")
@@ -78,9 +78,9 @@ public class ManagerController extends BaseController {
 
     @RequestMapping(value = "photos")
     public String photos(Model model,@RequestParam Integer id){
-        model.addAttribute("menus", getMenus("manager"));
+        model.addAttribute("menus", getMenus("backstage"));
         model.addAttribute("imgUrls",ehsService.getImgUrl(id));
-        return "/manager/photos";
+        return "/backstage/photos";
     }
 
     @RequestMapping(value = "export")

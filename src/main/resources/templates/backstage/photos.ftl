@@ -49,7 +49,7 @@
 <#include "/templates/layout/commonjs.ftl">
 <script src="/static/js/plugins/pictureView/js/jquery.mousewheel.min.js"></script>
 <script src="/static/js/plugins/pictureView/js/pictureViewer.js"></script>
-<#--<script src="/static/modular/manager/photos.js"></script>-->
+<#--<script src="/static/modular/backstage/photos.js"></script>-->
 
 <script type="text/javascript">
     $(document).ready(function(){

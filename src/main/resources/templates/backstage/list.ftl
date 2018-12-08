@@ -62,10 +62,10 @@
                                     </div>
                                     &nbsp&nbsp&nbsp
 
-                                    <button class="btn btn-success"  id="search" type="button" onclick="Manager.search()">搜索</button>&nbsp
-                                    <button class="btn btn-success" type="button" onclick="Manager.resetSearch()">重置</button>&nbsp
-                                    <#--<button class="btn btn-primary" type="button" onclick="Manager.create()">新增</button>-->
-                                    <button class="btn btn-danger" type="button" onclick="Manager.export()">导出</button>
+                                    <button class="btn btn-success"  id="search" type="button" onclick="Backstage.search()">搜索</button>&nbsp
+                                    <button class="btn btn-success" type="button" onclick="Backstage.resetSearch()">重置</button>&nbsp
+                                    <#--<button class="btn btn-primary" type="button" onclick="Backstage.create()">新增</button>-->
+                                    <button class="btn btn-danger" type="button" onclick="Backstage.export()">导出</button>
                                     <#--<button class="btn btn-primary" onclick="Qad.create()">新增</button>-->
                                 </div>
                             </div>
@@ -128,7 +128,7 @@
 
             <#--</div>-->
             <#--<div class="modal-footer">-->
-                <#--<button type="button" class="btn btn-sm btn-primary" onclick="manager.insert()">确定</button>-->
+                <#--<button type="button" class="btn btn-sm btn-primary" onclick="backstage.insert()">确定</button>-->
                 <#--<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>-->
             <#--</div>-->
         <#--</div><!-- /.modal-content &ndash;&gt;-->
@@ -139,7 +139,7 @@
 <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
 <script src="/static/js/plugins/chosen/chosen.jquery.js"></script>
 <script src="/static/js/plugins/select2/select2.full.min.js"></script>
-<script src="/static/modular/manager/manager.js"></script>
+<script src="/static/modular/backstage/backstage.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function(){

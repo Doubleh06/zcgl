@@ -1,12 +1,16 @@
 package cn.vtyc.ehs.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 public class SpringInterceptorRegister extends WebMvcConfigurerAdapter {
+    @Autowired
+    private Environment environment;
 
     /**
      * TODO 添加spring中的拦截器.
@@ -28,7 +32,10 @@ public class SpringInterceptorRegister extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //        registry.addResourceHandler("/image/**").addResourceLocations("classpath:/image/");
-        registry.addResourceHandler("/picture/**").addResourceLocations("file:E:/pictures/");
+        String filePath = "file:"+environment.getProperty("static.img.path")+"/";
+        System.out.println("file="+filePath);
+        registry.addResourceHandler("/picture/**").addResourceLocations(filePath);
+//        registry.addResourceHandler("/picture/**").addResourceLocations("file:E:/pictures/");
         super.addResourceHandlers(registry);
     }
 }

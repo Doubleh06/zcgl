@@ -42,7 +42,7 @@
 
 <#--分配角色弹框-->
 <#include "/templates/layout/commonjs.ftl">
-<#--<script src="/static/modular/manager/photos.js"></script>-->
+<#--<script src="/static/modular/backstage/photos.js"></script>-->
 
 <script type="text/javascript">
     $(document).ready(function(){

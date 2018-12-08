@@ -65,7 +65,12 @@ public class EmployeeApplyController extends BaseController {
         String time = ehsDto.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm");
         ehs.setAccidentTime(sdf.parse(date+" "+time));
-        ehs.setImgUrl(imgUrl.substring(0,imgUrl.length()-1));
+        if(StringUtils.isEmpty(imgUrl)){
+            ehs.setImgUrl(imgUrl);
+        }else{
+            ehs.setImgUrl(imgUrl.substring(0,imgUrl.length()-1));
+        }
+
         ehsDao.insert(ehs);
         return OK;
     }
@@ -105,8 +110,9 @@ public class EmployeeApplyController extends BaseController {
     }
     public boolean deleteLocalFile(String imgName,String imgSourceName){
         String path = environment.getProperty("static.img.path");
+        String pathName = path+"/"+imgName+"^"+imgSourceName;
         boolean flag = false;
-        File file = new File(path+imgName+"^"+imgSourceName);
+        File file = new File(pathName);
         if (file.exists()&&file.isFile()){
             file.delete();
             flag = true;
