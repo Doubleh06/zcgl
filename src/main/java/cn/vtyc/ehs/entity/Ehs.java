@@ -18,5 +18,7 @@ public class Ehs extends BaseEntity {
     private String uuid;
     private Date submitTime;
     private String address;
+    private Integer status;
+    private Date dealTime;
 
 }

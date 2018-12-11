@@ -46,15 +46,17 @@
                                         &nbsp&nbsp&nbsp
                                         <label>地点</label>
                                         <select class="form-control" id="address">
-                                            <option value="CZ" selected>常州</option>
+                                            <option value="" >---请选择---</option>
+                                            <option value="CZ" >常州</option>
                                             <option value="CQ">重庆</option>
                                         </select>
                                         &nbsp&nbsp&nbsp
                                         <label>部门</label>
                                         <select class="form-control" id="dept">
-                                            <#list depts as dept>
-                                                <option value="${dept.dept}">${dept.dept}</option>
-                                            </#list>
+                                            <option value="" >---请选择---</option>
+                                            <#--<#list depts as dept>-->
+                                                <#--<option value="${dept.dept}">${dept.dept}</option>-->
+                                            <#--</#list>-->
                                         </select>
                                         &nbsp&nbsp&nbsp
                                         <label>事故种类</label>

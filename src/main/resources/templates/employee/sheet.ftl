@@ -158,7 +158,7 @@
             method: "post",  //也可用put
             paramName: "files", //默认为file
             maxFiles: 5,//一次性上传的文件数量上限
-            maxFilesize: 100, //MB
+            maxFilesize: 50, //MB
             acceptedFiles: ".jpg,.png,.jpeg", //上传的类型
             parallelUploads: 3,
             addRemoveLinks: true,

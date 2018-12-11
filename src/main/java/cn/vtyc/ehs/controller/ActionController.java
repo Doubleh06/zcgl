@@ -6,11 +6,9 @@ import cn.vtyc.ehs.core.jqGrid.JqGridResult;
 import cn.vtyc.ehs.dao.AccidentTypeDao;
 import cn.vtyc.ehs.dao.EhsDao;
 import cn.vtyc.ehs.dto.EhsJqGridParam;
-
 import cn.vtyc.ehs.entity.Ehs;
 import cn.vtyc.ehs.service.DeptService;
 import cn.vtyc.ehs.service.EhsService;
-
 import com.github.pagehelper.PageInfo;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -32,8 +30,8 @@ import java.util.Map;
 
 
 @Controller
-@RequestMapping(value = "/backstage")
-public class ManagerController extends BaseController {
+@RequestMapping(value = "/action")
+public class ActionController extends BaseController {
 
     @Autowired
     private DeptService deptService;
@@ -49,7 +47,7 @@ public class ManagerController extends BaseController {
     public String list(Model model){
         model.addAttribute("menus", getMenus("backstage"));
         model.addAttribute("accidentTypes",accidentTypeDao.selectAll());
-        return "/backstage/list";
+        return "/action/list";
     }
 
     @RequestMapping(value = "/grid")

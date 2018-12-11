@@ -82,7 +82,7 @@ public class EmployeeApplyController extends BaseController {
             ehs.setImgUrl(imgUrl.substring(0,imgUrl.length()-1));
         }
         ehs.setSubmitTime(new Date());
-
+        ehs.setStatus(0);
         ehsDao.insert(ehs);
         return OK;
     }

@@ -12,38 +12,56 @@ Backstage.initOptions = function () {
     var options = {
         url : "/backstage/grid",
         autowidth:true,
-        colNames: ['编号','事故类型', '涉及人员',"人员所在部门/人员接待部门", '事发地点','事发时间','提交时间','事故情况','汇报人','操作'],
+        colNames: ['编号','事故类型', '涉及人员',"人员所在部门/人员接待部门", '事发地点','事发时间','提交时间','事故情况','汇报人','状态','操作'],
         colModel: [
             {name: 'id', index: 'id', width: 20},
             {name: 'accident_type_name', index: 'accident_type_name', width: 80},
             {name: 'accident_man', index: 'accident_man', width: 60},
             {name: 'dept', index: 'dept', width: 60},
-            {name: 'accident_place', index: 'accident_place', width: 200, sortable: false},
-            {name: 'accident_time', index: 'accident_time', width: 100,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+            {name: 'accident_place', index: 'accident_place', width: 60, sortable: false},
+            {name: 'accident_time', index: 'accident_time', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
                     }
                     var da = new Date(cellvar);
                     return dateFtt("yyyy-MM-dd hh:mm:ss", da);
                 }},
-            {name: 'submit_time', index: 'submit_time', width: 100,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+            {name: 'submit_time', index: 'submit_time', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
                     }
                     var da = new Date(cellvar);
                     return dateFtt("yyyy-MM-dd hh:mm:ss", da);
                 }},
-            {name: 'accident_situation', index: 'accident_situation', width: 200, sortable: false},
+            {name: 'accident_situation', index: 'accident_situation', width: 80, sortable: false},
             {name: 'report_man', index: 'report_man', width: 60, sortable: false},
-            {name: 'operations', index: 'operations', width: 100, sortable: false, formatter: function (cellValue, options, rowObject) {
+            {name: 'status', index: 'status', width: 40, sortable: false,formatter: function (cellvar, options, rowObject) {
+                    if (cellvar == 0) {
+                        return "处理中";
+                    }else if(cellvar == 1){
+                        return "批准"
+                    }else{
+                        return "拒绝";
+                    }
+
+                }},
+            {name: 'operations', index: 'operations', width: 150, sortable: false, formatter: function (cellValue, options, rowObject) {
                 var imgUrl = rowObject["img_url"];
+                var status = rowObject['status'];
 
                 var id = "'"+rowObject["id"]+"'";
                 var str = "";
                 if(""!=imgUrl&&null!=imgUrl){
-                    str += '<input type="button" class=" btn btn-sm btn-info"  value="照片查看" onclick="Backstage.photos(' + id + ')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-success"  value="照片查看" onclick="Backstage.photos(' + id + ')"/>&nbsp;';
                 }
-                str += '<input type="button" class=" btn btn-sm btn-warning"  value="删  除" onclick="Backstage.delete(' + id + ')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-warning"  value="删除" onclick="Backstage.delete(' + id + ')"/>&nbsp;';
+                if(0==status){
+                    str += '<input type="button" class=" btn btn-sm btn-danger"  value="批准" onclick="Backstage.changeStatus(' + id +','+ 1 + ')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-danger"  value="拒绝" onclick="Backstage.changeStatus(' + id +','+ 2 +')"/>&nbsp;';
+                }else if (1==status){
+                    str += '<input type="button" class=" btn btn-sm btn-info"  value="新增Action" onclick="Backstage.changeStatus(' + id +')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-info"  value="查看Action" onclick="Backstage.changeStatus(' + id +')"/>&nbsp;';
+                }
                 // str += '<input type="button" class=" btn btn-sm btn-info"  value="编辑" onclick="Backstage.edit(' + id + ')"/>&nbsp;';
                 // str += '<input type="button" class=" btn btn-sm btn-danger"  value="删除" onclick="Backstage.delete(' + id + ')"/>';
                 return str;
@@ -117,6 +135,18 @@ Backstage.delete = function del(id) {
             Backstage.search();
         });
     })
+};
+
+/**
+ * 批准 / 拒绝
+ *
+ * @param id    userId
+ */
+Backstage.changeStatus = function del(id,status) {
+        $.get("/backstage/changeStatus?id=" + id+"&status="+status, function () {
+            success("操作成功");
+            Backstage.search();
+        });
 };
 
 /**
