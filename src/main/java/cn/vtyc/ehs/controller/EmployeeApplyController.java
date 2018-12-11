@@ -1,5 +1,6 @@
 package cn.vtyc.ehs.controller;
 
+import cn.vtyc.ehs.core.BusinessException;
 import cn.vtyc.ehs.core.JSONResult;
 import cn.vtyc.ehs.core.Result;
 import cn.vtyc.ehs.dao.AccidentTypeDao;
@@ -9,7 +10,12 @@ import cn.vtyc.ehs.dao.ImageDao;
 import cn.vtyc.ehs.dto.EhsDto;
 import cn.vtyc.ehs.entity.Ehs;
 import cn.vtyc.ehs.entity.Image;
+import cn.vtyc.ehs.service.DeptService;
+import cn.vtyc.ehs.util.AjaxUtil;
 import cn.vtyc.ehs.util.MyFileUtil;
+import cn.vtyc.ehs.util.SpringContextUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +29,16 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import static cn.vtyc.ehs.core.ErrorCode.HR_INTERFACE_ERROR;
 
 @Controller
 @RequestMapping(value = "/employee")
 public class EmployeeApplyController extends BaseController {
 
-    @Autowired
-    private DeptmentDao deptmentDao;
     @Autowired
     private AccidentTypeDao accidentTypeDao;
     @Autowired
@@ -39,11 +46,15 @@ public class EmployeeApplyController extends BaseController {
     @Autowired
     private ImageDao imageDao;
     @Autowired
+    private DeptService deptService;
+    @Autowired
     private Environment environment;
+
 
     @RequestMapping(value = "sheet")
     public String list(Model model){
-        model.addAttribute("depts",deptmentDao.selectAll());
+
+        model.addAttribute("depts",deptService.getAddressArray("CZ") );
         model.addAttribute("accidentTypes",accidentTypeDao.selectAll());
         model.addAttribute("uuid", UUID.randomUUID());
         return "/employee/sheet";
@@ -70,6 +81,7 @@ public class EmployeeApplyController extends BaseController {
         }else{
             ehs.setImgUrl(imgUrl.substring(0,imgUrl.length()-1));
         }
+        ehs.setSubmitTime(new Date());
 
         ehsDao.insert(ehs);
         return OK;
@@ -108,9 +120,15 @@ public class EmployeeApplyController extends BaseController {
         deleteLocalFile(imgName,imgSourceName);
         return OK;
     }
+    @RequestMapping(value = "/address")
+    @ResponseBody
+    public Result getAddress(@RequestParam String address) {
+        return deptService.getAddressResult(address);
+    }
+
     public boolean deleteLocalFile(String imgName,String imgSourceName){
-        String path = environment.getProperty("static.img.path");
-        String pathName = path+"/"+imgName+"^"+imgSourceName;
+        String imgPath = environment.getProperty("static.img.path");
+        String pathName = imgPath+"/"+imgName+"^"+imgSourceName;
         boolean flag = false;
         File file = new File(pathName);
         if (file.exists()&&file.isFile()){

@@ -10,10 +10,11 @@ public class EhsDto {
     private String date;
     private String time;
     private String accidentMan;
-    private Integer dept;
+    private String dept;
     private String accidentPlace;
     private String accidentSituation;
     private String reportMan;
     private String uuid;
+    private String address;
 
 }

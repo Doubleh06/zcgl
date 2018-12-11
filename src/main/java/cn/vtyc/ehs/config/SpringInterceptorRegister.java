@@ -33,7 +33,6 @@ public class SpringInterceptorRegister extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //        registry.addResourceHandler("/image/**").addResourceLocations("classpath:/image/");
         String filePath = "file:"+environment.getProperty("static.img.path")+"/";
-        System.out.println("file="+filePath);
         registry.addResourceHandler("/picture/**").addResourceLocations(filePath);
 //        registry.addResourceHandler("/picture/**").addResourceLocations("file:E:/pictures/");
         super.addResourceHandlers(registry);

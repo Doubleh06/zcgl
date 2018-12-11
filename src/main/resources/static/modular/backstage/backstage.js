@@ -12,14 +12,21 @@ Backstage.initOptions = function () {
     var options = {
         url : "/backstage/grid",
         autowidth:true,
-        colNames: ['编号','事故类型', '涉及人员',"人员所在部门/人员接待部门", '事发地点','事发时间','事故情况','汇报人','操作'],
+        colNames: ['编号','事故类型', '涉及人员',"人员所在部门/人员接待部门", '事发地点','事发时间','提交时间','事故情况','汇报人','操作'],
         colModel: [
             {name: 'id', index: 'id', width: 20},
             {name: 'accident_type_name', index: 'accident_type_name', width: 80},
             {name: 'accident_man', index: 'accident_man', width: 60},
-            {name: 'dept_name', index: 'dept_name', width: 60},
+            {name: 'dept', index: 'dept', width: 60},
             {name: 'accident_place', index: 'accident_place', width: 200, sortable: false},
             {name: 'accident_time', index: 'accident_time', width: 100,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    if (cellvar == "" || cellvar == undefined) {
+                        return "";
+                    }
+                    var da = new Date(cellvar);
+                    return dateFtt("yyyy-MM-dd hh:mm:ss", da);
+                }},
+            {name: 'submit_time', index: 'submit_time', width: 100,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
                     }
@@ -54,6 +61,7 @@ Backstage.search = function () {
     searchParam.accidentMan = $("#accidentMan").val();
     searchParam.dept = $("#dept").val();
     searchParam.accidentType = $("#accidentType").val();
+    searchParam.address = $("#address").val();
     console.log(searchParam);
     Backstage.table.reload(searchParam);
 };

@@ -56,25 +56,21 @@ public class EhsService extends AbstractService<Ehs> {
         if(StringUtils.isNotEmpty(param.getAccidentMan())){
             sql.append(" and accident_man like '%").append(param.getAccidentMan()).append("%'");
         }
-        if(null!=param.getDept()){
-            sql.append(" and dept = ").append(param.getDept());
+        if(StringUtils.isNotEmpty(param.getAddress())){
+            sql.append(" and address = '").append(param.getAddress()).append("'");
+        }
+        if(StringUtils.isNotEmpty(param.getDept())){
+            sql.append(" and dept like '%").append(param.getDept()).append("%'");
         }
         if(null!=param.getAccidentType()){
             sql.append(" and accident_type = ").append(param.getAccidentType());
         }
-        //获取部门信息
-        List<Deptment> deptmentList = deptmentDao.selectAll();
         //获取事故种类信息
         List<AccidentType> accidentTypeList = accidentTypeDao.selectAll();
         //获取ehs信息
         List<Map> ehsList = ehsDao.selectEhsList(sql.toString());
         //获取用户信息
         for(Map ehs : ehsList){
-            for(Deptment deptment : deptmentList){
-                if(Integer.parseInt(ehs.get("dept").toString())==deptment.getId()){
-                    ehs.put("dept_name",deptment.getDeptName());
-                }
-            }
             for(AccidentType accidentType : accidentTypeList){
                 if(Integer.parseInt(ehs.get("accident_type").toString())==accidentType.getId()){
                     ehs.put("accident_type_name",accidentType.getName());

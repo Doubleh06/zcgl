@@ -39,7 +39,7 @@ public enum ErrorCode {
 
     TEMPLET_ERROR(-4, "短信模板异常"),
 
-    MESSAGE_SEND_ERROR(-5, "短信发送失败"),
+    HR_INTERFACE_ERROR(-5, "访问hr接口异常"),
 
     IMPORTEXCEL_ERROR(4, "导入excel失败");
 

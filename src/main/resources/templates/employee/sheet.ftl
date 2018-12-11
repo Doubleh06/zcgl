@@ -78,12 +78,21 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">人员所在地区</label><span style="color: red">*</span>
+                            <div class="col-sm-10">
+                                <select class="form-control" name="address" id="address">
+                                       <option value="CZ" selected>常州</option>
+                                       <option value="CQ">重庆</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">人员所在部门/人员接待部门</label><span style="color: red">*</span>
                             <div class="col-sm-10">
                                 <select class="form-control" name="dept" id="dept">
                                     <#--<option value="" selected>---请选择---</option>-->
                                    <#list depts as dept>
-                                       <option value="${dept.id}">${dept.deptName}</option>
+                                       <option value="${dept.dept}">${dept.dept}</option>
                                    </#list>
                                 </select>
                             </div>
@@ -191,6 +200,22 @@
                 forceParse: false,
                 calendarWeeks: true,
                 autoclose: true
+            });
+            $("#address").change(function () {
+                    $.ajax({
+                        url:"/employee/address?address="+$("#address").val(),
+                        type: 'GET',
+                        contentType: "application/json",
+                        success:function (r) {
+                            var depts = r.obj;
+                            $("#dept").empty();
+                            var option = "";
+                            for(var i=0;i<depts.length;i++){
+                                option += "<option  value='"+depts[i].dept+"'>"+depts[i].dept+"</option>";
+                            }
+                            $("#dept").append(option);
+                        }
+                    });
             });
         });
         $('.clockpicker').clockpicker();

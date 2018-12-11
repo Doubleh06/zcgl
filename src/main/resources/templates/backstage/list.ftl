@@ -44,11 +44,16 @@
                                         <label>涉及人员</label>
                                         <input type="text" class="form-control" id="accidentMan" style="width: 150px;">
                                         &nbsp&nbsp&nbsp
+                                        <label>地点</label>
+                                        <select class="form-control" id="address">
+                                            <option value="CZ" selected>常州</option>
+                                            <option value="CQ">重庆</option>
+                                        </select>
+                                        &nbsp&nbsp&nbsp
                                         <label>部门</label>
                                         <select class="form-control" id="dept">
-                                            <option value="">---请选择---</option>
                                             <#list depts as dept>
-                                                <option value="${dept.id}">${dept.deptName}</option>
+                                                <option value="${dept.dept}">${dept.dept}</option>
                                             </#list>
                                         </select>
                                         &nbsp&nbsp&nbsp
@@ -143,7 +148,22 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $(".select2_demo_1").select2();
+        $("#address").change(function () {
+            $.ajax({
+                url:"/employee/address?address="+$("#address").val(),
+                type: 'GET',
+                contentType: "application/json",
+                success:function (r) {
+                    var depts = r.obj;
+                    $("#dept").empty();
+                    var option = "";
+                    for(var i=0;i<depts.length;i++){
+                        option += "<option  value='"+depts[i].dept+"'>"+depts[i].dept+"</option>";
+                    }
+                    $("#dept").append(option);
+                }
+            });
+        });
     });
 </script>
 </body>

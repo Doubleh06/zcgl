@@ -10,11 +10,13 @@ public class Ehs extends BaseEntity {
     private Integer accidentType;
     private Date accidentTime;
     private String accidentMan;
-    private Integer dept;
+    private String dept;
     private String accidentPlace;
     private String accidentSituation;
     private String reportMan;
     private String imgUrl;
     private String uuid;
+    private Date submitTime;
+    private String address;
 
 }
