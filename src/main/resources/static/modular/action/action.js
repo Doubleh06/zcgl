@@ -1,16 +1,16 @@
-var Backstage = {
+var Action = {
     tableId: "#grid-table",
     pagerId: "#grid-pager",
     table: null,
-    domain: "backstage"
+    domain: "action"
 };
 
 /**
  * jqGrid初始化参数
  */
-Backstage.initOptions = function () {
+Action.initOptions = function () {
     var options = {
-        url : "/backstage/grid",
+        url : "/action/grid",
         autowidth:true,
         colNames: ['编号','事故类型', '涉及人员',"人员所在部门/人员接待部门", '事发地点','事发时间','提交时间','事故情况','汇报人','状态','操作'],
         colModel: [
@@ -52,18 +52,18 @@ Backstage.initOptions = function () {
                 var id = "'"+rowObject["id"]+"'";
                 var str = "";
                 if(""!=imgUrl&&null!=imgUrl){
-                    str += '<input type="button" class=" btn btn-sm btn-success"  value="照片查看" onclick="Backstage.photos(' + id + ')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-success"  value="照片查看" onclick="Action.photos(' + id + ')"/>&nbsp;';
                 }
-                    str += '<input type="button" class=" btn btn-sm btn-warning"  value="删除" onclick="Backstage.delete(' + id + ')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-warning"  value="删除" onclick="Action.delete(' + id + ')"/>&nbsp;';
                 if(0==status){
-                    str += '<input type="button" class=" btn btn-sm btn-danger"  value="批准" onclick="Backstage.changeStatus(' + id +','+ 1 + ')"/>&nbsp;';
-                    str += '<input type="button" class=" btn btn-sm btn-danger"  value="拒绝" onclick="Backstage.changeStatus(' + id +','+ 2 +')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-danger"  value="批准" onclick="Action.changeStatus(' + id +','+ 1 + ')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-danger"  value="拒绝" onclick="Action.changeStatus(' + id +','+ 2 +')"/>&nbsp;';
                 }else if (1==status){
-                    str += '<input type="button" class=" btn btn-sm btn-info"  value="新增Action" onclick="Backstage.createAction(' + id +')"/>&nbsp;';
-                    str += '<input type="button" class=" btn btn-sm btn-info"  value="查看Action" onclick="Backstage.seeAction(' + id +')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-info"  value="新增Action" onclick="Action.createAction(' + id +')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-info"  value="查看Action" onclick="Action.seeAction(' + id +')"/>&nbsp;';
                 }
-                // str += '<input type="button" class=" btn btn-sm btn-info"  value="编辑" onclick="Backstage.edit(' + id + ')"/>&nbsp;';
-                // str += '<input type="button" class=" btn btn-sm btn-danger"  value="删除" onclick="Backstage.delete(' + id + ')"/>';
+                // str += '<input type="button" class=" btn btn-sm btn-info"  value="编辑" onclick="Action.edit(' + id + ')"/>&nbsp;';
+                // str += '<input type="button" class=" btn btn-sm btn-danger"  value="删除" onclick="Action.delete(' + id + ')"/>';
                 return str;
             }}
         ]
@@ -74,43 +74,43 @@ Backstage.initOptions = function () {
 /**
  * 根据关键词搜索
  */
-Backstage.search = function () {
+Action.search = function () {
     var searchParam = {};
     searchParam.accidentMan = $("#accidentMan").val();
     searchParam.dept = $("#dept").val();
     searchParam.accidentType = $("#accidentType").val();
     searchParam.address = $("#address").val();
     console.log(searchParam);
-    Backstage.table.reload(searchParam);
+    Action.table.reload(searchParam);
 };
 
 /**
  * 重置搜索
  */
-Backstage.resetSearch = function () {
+Action.resetSearch = function () {
     // $("#task").val("");
     // $("#deptmentId").html("请选择");
     // $("#userId").html("请选择");
-    // Backstage.search();
-    window.location.href = "/backstage/list";
+    // Action.search();
+    window.location.href = "/action/list";
 };
 
 /**
  *新增
  */
-Backstage.create = function () {
+Action.create = function () {
     window.location.href = "/createDemand/create";
 }
 /**
  * 导出
  */
-Backstage.export = function () {
-    window.location.href = "/backstage/export";
+Action.export = function () {
+    window.location.href = "/action/export";
 
     // $("#exportModal").modal();
     // $.ajax({
     //     type : 'POST',
-    //     url: '/Backstage/export',
+    //     url: '/Action/export',
     //     contentType : "application/json" ,
     //     // data : JSON.stringify({
     //     //     "keys" : keys
@@ -128,43 +128,34 @@ Backstage.export = function () {
  *
  * @param id    userId
  */
-Backstage.delete = function del(id) {
+Action.delete = function del(id) {
     warning("确定删除吗", "", function () {
-        $.get("/backstage/delete?id=" + id, function () {
+        $.get("/action/delete?id=" + id, function () {
             success("成功删除");
-            Backstage.search();
+            Action.search();
         });
     })
 };
 
-/**
- * 批准 / 拒绝
- *
- * @param id    userId
- */
-Backstage.changeStatus = function del(id,status) {
-        $.get("/backstage/changeStatus?id=" + id+"&status="+status, function () {
-            success("操作成功");
-            Backstage.search();
-        });
-};
+Action.insert = function () {
+    var action = getFormJson($("#create-form"));
+    $.ajax({
+        url: "/action/insert",
+        type: 'POST',
+        data: JSON.stringify(action),
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        success: function (r) {
+            if (r.code === 0) {
+                $("#createModal").modal("hide");
+                success("保存成功");
+                Menu.search();
+                $("#create-form")[0].reset();
+            }
+        }
+    })
+}
 
-/**
- * 照片查看
- *
- * @param id    userId
- */
-Backstage.photos = function (id) {
-    window.location.href = "/backstage/photos?id="+id;
-};
-/**
- * 创建行动
- *
- * @param id    userId
- */
-Backstage.createAction = function (id) {
-    window.location.href = "/action/createAction?id="+id;
-};
 
 
 
@@ -190,7 +181,7 @@ Backstage.createAction = function (id) {
 
 $(function() {
     $('.chosen-select').chosen({width: "100%"});
-    var jqGrid = new JqGrid("#grid-table", "#grid-pager", Backstage.initOptions());
-    Backstage.table = jqGrid.init();
+    var jqGrid = new JqGrid("#grid-table", "#grid-pager", Action.initOptions());
+    Action.table = jqGrid.init();
 
 });

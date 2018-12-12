@@ -1,17 +1,17 @@
-package cn.vtyc.ehs.entity;
+package cn.vtyc.ehs.dto;
 
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
-public class Action extends BaseEntity {
-    private Integer ehsId;
+public class ActionDto {
     private String desc;
+    private Integer ehsId;
     private String responsibleMan;
     private String responsibleDept;
     private String responsibleDirector;
-    private Date closeTime;
-    private String uuid;
+    private String closeDate;
+    private String closeTime;
     private String imgUrl;
+    private String uuid;
+
 }
