@@ -1,14 +1,11 @@
-package cn.vtyc.ehs.controller.MaintenanceController;
+package cn.vtyc.ehs.controller.maintenanceController;
 
 import cn.vtyc.ehs.controller.BaseController;
 import cn.vtyc.ehs.core.JSONResult;
 import cn.vtyc.ehs.core.Result;
 import cn.vtyc.ehs.core.jqGrid.JqGridResult;
-import cn.vtyc.ehs.dto.AccidentTypeJqGridParam;
 import cn.vtyc.ehs.dto.PersonInfoJqGridParam;
-import cn.vtyc.ehs.entity.AccidentType;
 import cn.vtyc.ehs.entity.PersonInfo;
-import cn.vtyc.ehs.service.AccidentTypeService;
 import cn.vtyc.ehs.service.PersonInfoService;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;

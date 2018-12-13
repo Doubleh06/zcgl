@@ -24,4 +24,6 @@ public interface ActionDao extends BaseDao<Action> {
 
     @Select("select count(*) from action where ehs_id = ${id} ")
     Integer getTotalById(@Param("id")Integer id);
+
+
 }
