@@ -18,13 +18,13 @@
 
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>故障列表</h2>
+                <h2>EHS申请表</h2>
                 <ol class="breadcrumb">
                     <li>
                         <a href="/main">Home</a>
                     </li>
                     <li class="active">
-                        <strong>列表</strong>
+                        <strong>EHS申请表</strong>
                     </li>
                 </ol>
             </div>

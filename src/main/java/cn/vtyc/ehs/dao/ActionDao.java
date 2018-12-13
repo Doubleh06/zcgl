@@ -14,8 +14,14 @@ import java.util.Map;
 public interface ActionDao extends BaseDao<Action> {
 
     @Select("select * from action ${sql}")
-    List<Map> selectActionList(@Param("sql") String sql);
+    List<Action> selectActionList(@Param("sql") String sql);
+
+    @Select("select * from action ${sql}")
+    Action selectAction(@Param("sql") String sql);
 
     @Select("select img_url from action where id = ${id}")
     String selectImgUrlById(@Param("id") Integer id);
+
+    @Select("select count(*) from action where ehs_id = ${id} ")
+    Integer getTotalById(@Param("id")Integer id);
 }

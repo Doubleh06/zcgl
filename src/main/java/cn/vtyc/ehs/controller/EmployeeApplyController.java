@@ -68,7 +68,7 @@ public class EmployeeApplyController extends BaseController {
         List<Image> imageList = imageDao.selectImgSourceName(uuid);
         String imgUrl = "";
         for (Image image : imageList){
-            imgUrl += image.getImgName()+"^"+image.getImgSourceName()+"|";
+            imgUrl += image.getImgName()+"~"+image.getImgSourceName()+"|";
         }
         Ehs ehs = new Ehs();
         BeanUtils.copyProperties(ehsDto, ehs);
@@ -100,8 +100,8 @@ public class EmployeeApplyController extends BaseController {
         for (String subImg : subImgs){
             Image image = new Image();
             image.setUuid(uuid);
-            image.setImgName(subImg.split("\\^")[0]);
-            image.setImgSourceName(subImg.split("\\^")[1]);
+            image.setImgName(subImg.split("~")[0]);
+            image.setImgSourceName(subImg.split("~")[1]);
             imageList.add(image);
         }
         imageDao.insertList(imageList);
@@ -128,7 +128,7 @@ public class EmployeeApplyController extends BaseController {
 
     public boolean deleteLocalFile(String imgName,String imgSourceName){
         String imgPath = environment.getProperty("static.img.path");
-        String pathName = imgPath+"/"+imgName+"^"+imgSourceName;
+        String pathName = imgPath+"/"+imgName+"~"+imgSourceName;
         boolean flag = false;
         File file = new File(pathName);
         if (file.exists()&&file.isFile()){

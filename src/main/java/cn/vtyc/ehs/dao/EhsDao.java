@@ -17,4 +17,5 @@ public interface EhsDao extends BaseDao<Ehs> {
 
     @Select("select img_url from ehs where id = ${id}")
     String selectImgUrlById(@Param("id") Integer id);
+
 }

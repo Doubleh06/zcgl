@@ -4,6 +4,7 @@ import cn.vtyc.ehs.core.JSONResult;
 import cn.vtyc.ehs.core.Result;
 import cn.vtyc.ehs.core.jqGrid.JqGridResult;
 import cn.vtyc.ehs.dao.AccidentTypeDao;
+import cn.vtyc.ehs.dao.ActionDao;
 import cn.vtyc.ehs.dao.EhsDao;
 import cn.vtyc.ehs.dto.EhsJqGridParam;
 
@@ -43,6 +44,7 @@ public class ManagerController extends BaseController {
     private EhsService ehsService;
     @Autowired
     private EhsDao ehsDao;
+
 
 
     @RequestMapping(value = "list")

@@ -11,57 +11,48 @@ var Action = {
 Action.initOptions = function () {
     var options = {
         url : "/action/grid",
+        postData : {
+            ehsId : $("#ehsId").val()
+        },
         autowidth:true,
-        colNames: ['编号','事故类型', '涉及人员',"人员所在部门/人员接待部门", '事发地点','事发时间','提交时间','事故情况','汇报人','状态','操作'],
+        colNames: ['ehsId','描述', '负责人',"地址", '负责部门','负责主管','关闭时间','操作'],
         colModel: [
-            {name: 'id', index: 'id', width: 20},
-            {name: 'accident_type_name', index: 'accident_type_name', width: 80},
-            {name: 'accident_man', index: 'accident_man', width: 60},
-            {name: 'dept', index: 'dept', width: 60},
-            {name: 'accident_place', index: 'accident_place', width: 60, sortable: false},
-            {name: 'accident_time', index: 'accident_time', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
-                    if (cellvar == "" || cellvar == undefined) {
-                        return "";
-                    }
-                    var da = new Date(cellvar);
-                    return dateFtt("yyyy-MM-dd hh:mm:ss", da);
-                }},
-            {name: 'submit_time', index: 'submit_time', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
-                    if (cellvar == "" || cellvar == undefined) {
-                        return "";
-                    }
-                    var da = new Date(cellvar);
-                    return dateFtt("yyyy-MM-dd hh:mm:ss", da);
-                }},
-            {name: 'accident_situation', index: 'accident_situation', width: 80, sortable: false},
-            {name: 'report_man', index: 'report_man', width: 60, sortable: false},
-            {name: 'status', index: 'status', width: 40, sortable: false,formatter: function (cellvar, options, rowObject) {
-                    if (cellvar == 0) {
-                        return "处理中";
-                    }else if(cellvar == 1){
-                        return "批准"
+            {name: 'ehsId', index: 'ehsId', width: 20},
+            {name: 'descriptive', index: 'descriptive', width: 80},
+            {name: 'responsibleMan', index: 'responsibleMan', width: 60},
+            {name: 'address', index: 'address', width: 50, sortable: false,formatter: function (cellvar, options, rowObject) {
+                    if (cellvar == 'CZ') {
+                        return "常州";
+                    }else if(cellvar == 'CQ'){
+                        return "重庆"
                     }else{
-                        return "拒绝";
+                        return "";
                     }
 
                 }},
-            {name: 'operations', index: 'operations', width: 150, sortable: false, formatter: function (cellValue, options, rowObject) {
-                var imgUrl = rowObject["img_url"];
-                var status = rowObject['status'];
-
+            {name: 'responsibleDept', index: 'responsibleDept', width: 60},
+            {name: 'responsibleDirector', index: 'responsibleDirector', width: 60, sortable: false},
+            {name: 'closeTime', index: 'closeTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    if (cellvar == "" || cellvar == undefined) {
+                        return "";
+                    }
+                    var da = new Date(cellvar);
+                    return dateFtt("yyyy-MM-dd hh:mm:ss", da);
+                }},
+            {name: 'operations', index: 'operations', width: 100, sortable: false, formatter: function (cellValue, options, rowObject) {
+                var imgUrl = rowObject["imgUrl"];
                 var id = "'"+rowObject["id"]+"'";
+                var ehsId = "'"+rowObject["ehsId"]+"'";
+                var realCloseTime = rowObject["realCloseTime"];
                 var str = "";
                 if(""!=imgUrl&&null!=imgUrl){
-                    str += '<input type="button" class=" btn btn-sm btn-success"  value="照片查看" onclick="Action.photos(' + id + ')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-success"  value="查看附件" onclick="Action.enclosure(' + id+","+ehsId + ')"/>&nbsp;';
                 }
-                    str += '<input type="button" class=" btn btn-sm btn-warning"  value="删除" onclick="Action.delete(' + id + ')"/>&nbsp;';
-                if(0==status){
-                    str += '<input type="button" class=" btn btn-sm btn-danger"  value="批准" onclick="Action.changeStatus(' + id +','+ 1 + ')"/>&nbsp;';
-                    str += '<input type="button" class=" btn btn-sm btn-danger"  value="拒绝" onclick="Action.changeStatus(' + id +','+ 2 +')"/>&nbsp;';
-                }else if (1==status){
-                    str += '<input type="button" class=" btn btn-sm btn-info"  value="新增Action" onclick="Action.createAction(' + id +')"/>&nbsp;';
-                    str += '<input type="button" class=" btn btn-sm btn-info"  value="查看Action" onclick="Action.seeAction(' + id +')"/>&nbsp;';
+                if (""==realCloseTime||null==realCloseTime){
+                    str += '<input type="button" class=" btn btn-sm btn-warning"  value="关闭" onclick="Action.close(' + id + ')"/>&nbsp;';
                 }
+
+
                 // str += '<input type="button" class=" btn btn-sm btn-info"  value="编辑" onclick="Action.edit(' + id + ')"/>&nbsp;';
                 // str += '<input type="button" class=" btn btn-sm btn-danger"  value="删除" onclick="Action.delete(' + id + ')"/>';
                 return str;
@@ -76,11 +67,10 @@ Action.initOptions = function () {
  */
 Action.search = function () {
     var searchParam = {};
-    searchParam.accidentMan = $("#accidentMan").val();
-    searchParam.dept = $("#dept").val();
-    searchParam.accidentType = $("#accidentType").val();
+    searchParam.responsibleMan = $("#responsibleMan").val();
+    searchParam.responsibleDept = $("#responsibleDept").val();
+    searchParam.responsibleDirector = $("#responsibleDirector").val();
     searchParam.address = $("#address").val();
-    console.log(searchParam);
     Action.table.reload(searchParam);
 };
 
@@ -88,24 +78,26 @@ Action.search = function () {
  * 重置搜索
  */
 Action.resetSearch = function () {
-    // $("#task").val("");
-    // $("#deptmentId").html("请选择");
-    // $("#userId").html("请选择");
-    // Action.search();
-    window.location.href = "/action/list";
+    $("#responsibleMan").val("");
+    // $("#responsibleDept").val("---请选择---");
+    $("#responsibleDirector").val("");
+    $("#address").find("option[value='']").attr("selected",true);
+    $("#responsibleDept").empty();//find("option[value='']").attr("selected",true);
+    $("#responsibleDept").append("<option value=''>---请选择---</option>");
+    Action.search();
 };
 
 /**
  *新增
  */
-Action.create = function () {
-    window.location.href = "/createDemand/create";
+Action.enclosure = function (id,ehsId) {
+    window.location.href = "/action/enclosureAction?id="+id+"&ehsId="+ehsId;
 }
 /**
  * 导出
  */
-Action.export = function () {
-    window.location.href = "/action/export";
+Action.export = function (ehsId) {
+    window.location.href = "/action/export?ehsId="+ehsId;
 
     // $("#exportModal").modal();
     // $.ajax({
@@ -128,7 +120,7 @@ Action.export = function () {
  *
  * @param id    userId
  */
-Action.delete = function del(id) {
+Action.delete = function (id) {
     warning("确定删除吗", "", function () {
         $.get("/action/delete?id=" + id, function () {
             success("成功删除");
@@ -137,7 +129,26 @@ Action.delete = function del(id) {
     })
 };
 
+/**
+ * 关闭
+ *
+ * @param id    userId
+ */
+Action.close = function (id) {
+    warning("确定关闭吗？", "", function () {
+        $.get("/action/close?id=" + id, function () {
+            success("关闭成功");
+            Action.search();
+        });
+    })
+};
+
 Action.insert = function () {
+    var email = $("#email").val();
+    if(null==email||""==email){
+        error("邮件地址不能为空");
+        return;
+    }
     var action = getFormJson($("#create-form"));
     $.ajax({
         url: "/action/insert",
@@ -148,9 +159,8 @@ Action.insert = function () {
         success: function (r) {
             if (r.code === 0) {
                 $("#createModal").modal("hide");
-                success("保存成功");
-                Menu.search();
-                $("#create-form")[0].reset();
+                successthen("保存成功",null,"/backstage/list");
+                // $("#create-form")[0].reset();
             }
         }
     })

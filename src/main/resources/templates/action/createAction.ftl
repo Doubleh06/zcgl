@@ -48,16 +48,24 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">描述</label>
                             <div class="col-sm-10">
-                                <textarea id="desc" name="desc" placeholder="请填入" style="width: 100%;height: 100px"></textarea>
+                                <textarea id="descriptive" name="descriptive" placeholder="请填入" style="width: 100%;height: 100px"></textarea>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label">责任人</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input id="responsibleMan" type="text" class="form-control" name="responsibleMan">
                                 <input id="ehsId" type="hidden" class="form-control" name="ehsId" value="${ehsId}">
                                 <input id="uuid" type="hidden" class="form-control" name="uuid" value="${uuid}">
+                            </div>
+                            <label class="col-sm-2 control-label">邮箱</label>
+                            <div class="col-sm-4">
+                                <#--<input id="email" type="text" class="form-control" name="email">-->
+                                    <#--<select class="form-control" name="email" id="email">-->
+                                    <select class="select2_demo_1 form-control" name="email" id="email">
+                                        <#--<option value="">---请选择---</option>-->
+                                    </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -199,8 +207,34 @@ a
                 }
             });
         });
+        $("#responsibleMan").blur(function () {
+            $.ajax({
+                url:"/action/getEmail?name="+$("#responsibleMan").val(),
+                type: 'GET',
+                contentType: "application/json",
+                success:function (r) {
+                    var emails = r.obj;
+                    $("#email").empty();
+                    var option = "";
+                    if(emails.length==1){
+                        option += "<option  value='"+emails[0].email+"'>"+emails[0].email+"</option>";
+                    }else{
+                        for(var i=0;i<emails.length;i++){
+                            option += "<option  value='"+emails[i].email+"'>"+emails[i].email+"</option>";
+                        }
+                    }
+                    // console.log(option);
+                    $("#email").append(option);
+                }
+            });
+        });
     });
     $('.clockpicker').clockpicker();
+    // $(".select2_demo_1").select2();
+    // $(".select2_demo_3").select2({
+    //     placeholder: "请选择",
+    //     allowClear: true
+    // });
 </script>
 </body>
 </html>

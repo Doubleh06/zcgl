@@ -48,7 +48,7 @@ Backstage.initOptions = function () {
             {name: 'operations', index: 'operations', width: 150, sortable: false, formatter: function (cellValue, options, rowObject) {
                 var imgUrl = rowObject["img_url"];
                 var status = rowObject['status'];
-
+                var total = rowObject["total_action"];
                 var id = "'"+rowObject["id"]+"'";
                 var str = "";
                 if(""!=imgUrl&&null!=imgUrl){
@@ -60,6 +60,8 @@ Backstage.initOptions = function () {
                     str += '<input type="button" class=" btn btn-sm btn-danger"  value="拒绝" onclick="Backstage.changeStatus(' + id +','+ 2 +')"/>&nbsp;';
                 }else if (1==status){
                     str += '<input type="button" class=" btn btn-sm btn-info"  value="新增Action" onclick="Backstage.createAction(' + id +')"/>&nbsp;';
+                }
+                if(0!=total){
                     str += '<input type="button" class=" btn btn-sm btn-info"  value="查看Action" onclick="Backstage.seeAction(' + id +')"/>&nbsp;';
                 }
                 // str += '<input type="button" class=" btn btn-sm btn-info"  value="编辑" onclick="Backstage.edit(' + id + ')"/>&nbsp;';
@@ -95,12 +97,8 @@ Backstage.resetSearch = function () {
     window.location.href = "/backstage/list";
 };
 
-/**
- *新增
- */
-Backstage.create = function () {
-    window.location.href = "/createDemand/create";
-}
+
+
 /**
  * 导出
  */
@@ -166,7 +164,12 @@ Backstage.createAction = function (id) {
     window.location.href = "/action/createAction?id="+id;
 };
 
-
+/**
+ * 查看
+ */
+Backstage.seeAction = function (id) {
+    window.location.href = "/action/seeAction?id="+id;
+}
 
 
     function dateFtt(fmt,date)

@@ -5,6 +5,7 @@ import cn.vtyc.ehs.core.AbstractService;
 import cn.vtyc.ehs.core.BaseDao;
 import cn.vtyc.ehs.core.jqGrid.JqGridParam;
 import cn.vtyc.ehs.dao.AccidentTypeDao;
+import cn.vtyc.ehs.dao.ActionDao;
 import cn.vtyc.ehs.dao.DeptmentDao;
 import cn.vtyc.ehs.dao.EhsDao;
 import cn.vtyc.ehs.dto.EhsJqGridParam;
@@ -30,6 +31,8 @@ public class EhsService extends AbstractService<Ehs> {
     private AccidentTypeDao accidentTypeDao;
     @Autowired
     private DeptmentDao deptmentDao;
+    @Autowired
+    private ActionDao actionDao;
 
 
 
@@ -69,6 +72,8 @@ public class EhsService extends AbstractService<Ehs> {
         List<AccidentType> accidentTypeList = accidentTypeDao.selectAll();
         //获取ehs信息
         List<Map> ehsList = ehsDao.selectEhsList(sql.toString());
+
+
         //获取用户信息
         for(Map ehs : ehsList){
             for(AccidentType accidentType : accidentTypeList){
@@ -76,6 +81,7 @@ public class EhsService extends AbstractService<Ehs> {
                     ehs.put("accident_type_name",accidentType.getName());
                 }
             }
+            ehs.put("total_action",actionDao.getTotalById(Integer.parseInt(ehs.get("id").toString())));
         }
         return new PageInfo<>(ehsList);
     }

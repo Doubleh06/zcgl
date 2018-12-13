@@ -23,7 +23,7 @@ public class MyFileUtil {
                     // 新的图片名称
 //                    newPicName = UUID.randomUUID() + originalFileNameLeft.substring(originalFileNameLeft.lastIndexOf("."));
                     Date date = new Date();
-                    newPicName = sdf.format(date) + "^" +originalFileNameLeft;//.substring(originalFileNameLeft.lastIndexOf("."));
+                    newPicName = sdf.format(date) + "~" +originalFileNameLeft;//.substring(originalFileNameLeft.lastIndexOf("."));
 
                     // 新图片，写入磁盘
                     File f = new File(imgPath, newPicName);
