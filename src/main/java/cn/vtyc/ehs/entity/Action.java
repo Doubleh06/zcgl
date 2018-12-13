@@ -16,5 +16,6 @@ public class Action extends BaseEntity {
     private String imgUrl;
     private String address;
     private String email;
+    private String directorEmail;
 
 }

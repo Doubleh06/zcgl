@@ -59,6 +59,7 @@
                                         <select class="form-control" id="responsibleDept">
                                             <option value="" >---请选择---</option>
                                         </select>
+                                        &nbsp&nbsp&nbsp
                                         <label>负责主管</label>
                                         <input type="text" class="form-control" id="responsibleDirector" style="width: 150px;">
                                     </div>

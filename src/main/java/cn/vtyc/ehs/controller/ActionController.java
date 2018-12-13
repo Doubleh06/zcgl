@@ -145,7 +145,7 @@ public class ActionController extends BaseController {
         //发送邮件
         //内容拼接
         String content = "行动描述："+action.getDescriptive();
-        content += "\r\n";
+        content += "<br>";
         content += "关闭时间："+date +" "+time;
         //附件拼接
         List<Map<String,String>> list = new ArrayList<>();

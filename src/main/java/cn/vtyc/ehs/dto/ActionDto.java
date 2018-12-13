@@ -17,5 +17,6 @@ public class ActionDto {
     private String imgUrl;
     private String uuid;
     private String email;
+    private String directorEmail;
 
 }

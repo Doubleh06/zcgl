@@ -15,7 +15,7 @@ Action.initOptions = function () {
             ehsId : $("#ehsId").val()
         },
         autowidth:true,
-        colNames: ['ehsId','描述', '负责人',"地址", '负责部门','负责主管','关闭时间','操作'],
+        colNames: ['ehsId','描述', '负责人',"地址", '负责部门','负责主管','关闭时间','实际关闭时间','操作'],
         colModel: [
             {name: 'ehsId', index: 'ehsId', width: 20},
             {name: 'descriptive', index: 'descriptive', width: 80},
@@ -33,6 +33,13 @@ Action.initOptions = function () {
             {name: 'responsibleDept', index: 'responsibleDept', width: 60},
             {name: 'responsibleDirector', index: 'responsibleDirector', width: 60, sortable: false},
             {name: 'closeTime', index: 'closeTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    if (cellvar == "" || cellvar == undefined) {
+                        return "";
+                    }
+                    var da = new Date(cellvar);
+                    return dateFtt("yyyy-MM-dd hh:mm:ss", da);
+                }},
+            {name: 'realCloseTime', index: 'realCloseTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
                     }
@@ -57,7 +64,24 @@ Action.initOptions = function () {
                 // str += '<input type="button" class=" btn btn-sm btn-danger"  value="删除" onclick="Action.delete(' + id + ')"/>';
                 return str;
             }}
-        ]
+        ],
+        gridComplete: function () {
+            var ids = $("#grid-table").getDataIDs();
+            for(var i=0;i<ids.length;i++){
+                var rowData = $("#grid-table").getRowData(ids[i]);
+                var realCloseTime = rowData.realCloseTime;
+                if(null==realCloseTime||""==realCloseTime){
+                    var flag = dateDiff(rowData.closeTime);
+                    if("Y"==flag){
+                        $('#'+ids[i]).find("td").css("color","#d2cf1d");
+                    }else if("R"==flag){
+                        $('#'+ids[i]).find("td").css("color","#d23122");
+                    }
+
+                }
+            }
+        }
+
     };
     return options;
 };
@@ -143,13 +167,20 @@ Action.close = function (id) {
     })
 };
 
-Action.insert = function () {
+Action.insert = function (btn) {
     var email = $("#email").val();
     if(null==email||""==email){
-        error("邮件地址不能为空");
+        error("责任人邮件地址不能为空");
+        return;
+    }
+    var directorEmail = $("#directorEmail").val();
+    if(null==directorEmail||""==directorEmail){
+        error("责任主管邮件地址不能为空");
         return;
     }
     var action = getFormJson($("#create-form"));
+    var l = $(btn).ladda();
+    l.ladda('start');
     $.ajax({
         url: "/action/insert",
         type: 'POST',
@@ -158,7 +189,8 @@ Action.insert = function () {
         dataType: "json",
         success: function (r) {
             if (r.code === 0) {
-                $("#createModal").modal("hide");
+                // $("#createModal").modal("hide");
+                l.ladda('stop');
                 successthen("保存成功",null,"/backstage/list");
                 // $("#create-form")[0].reset();
             }
@@ -170,8 +202,7 @@ Action.insert = function () {
 
 
 
-    function dateFtt(fmt,date)
-    { //author: meizz
+function dateFtt(fmt,date) { //author: meizz
         var o = {
             "M+" : date.getMonth()+1,                 //月份
             "d+" : date.getDate(),                    //日
@@ -187,7 +218,24 @@ Action.insert = function () {
             if(new RegExp("("+ k +")").test(fmt))
                 fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
         return fmt;
+}
+
+function dateDiff(date) { //author: meizz
+    //指定关闭时间
+    var time = Date.parse(new Date(date));
+    //当前时间
+    var ctime = Date.parse(new Date());
+    var diff = (time-ctime)/1000;
+    // console.log(diff)
+    if(-86400*7<diff&&diff<86400*3){
+        return "Y";
+    }else if (diff<-86400*7){
+        return "R";
+    }else{
+        return "N";
     }
+
+}
 
 $(function() {
     $('.chosen-select').chosen({width: "100%"});

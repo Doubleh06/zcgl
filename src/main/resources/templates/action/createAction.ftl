@@ -12,6 +12,7 @@
     <link href="/static/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
     <link href="/static/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
     <link href="/static/css/style.css" rel="stylesheet">
+    <link href="/static/css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
 
 </head>
 
@@ -87,8 +88,16 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">责任主管</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <input id="responsibleDirector" type="text" class="form-control" name="responsibleDirector">
+                            </div>
+                            <label class="col-sm-2 control-label">邮箱</label>
+                            <div class="col-sm-4">
+                            <#--<input id="email" type="text" class="form-control" name="email">-->
+                            <#--<select class="form-control" name="email" id="email">-->
+                                <select class="select2_demo_1 form-control" name="directorEmail" id="directorEmail">
+                                <#--<option value="">---请选择---</option>-->
+                                </select>
                             </div>
                         </div>
 
@@ -117,7 +126,7 @@
                         </form>
                         <br>
                         <div class="">
-                            <button type="button" class="btn btn-sm btn-primary" onclick="Action.insert()">确定</button>
+                            <button type="button" class="btn btn-sm btn-primary ladda-button" data-style="slide-left" onclick="Action.insert(this)">确  定</button>
                         <#--<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>-->
                         </div>
                     </div>
@@ -133,6 +142,9 @@
 a
 <#--分配角色弹框-->
 <#include "/templates/layout/commonjs.ftl">
+<script src="/static/js/plugins/ladda/spin.min.js"></script>
+<script src="/static/js/plugins/ladda/ladda.min.js"></script>
+<script src="/static/js/plugins/ladda/ladda.jquery.min.js"></script>
 <script src="/static/js/plugins/chosen/chosen.jquery.js"></script>
 <script src="/static/modular/action/action.js"></script>
 <script src="/static/js/plugins/select2/select2.full.min.js"></script>
@@ -225,6 +237,27 @@ a
                     }
                     // console.log(option);
                     $("#email").append(option);
+                }
+            });
+        });
+        $("#responsibleDirector").blur(function () {
+            $.ajax({
+                url:"/action/getEmail?name="+$("#responsibleDirector").val(),
+                type: 'GET',
+                contentType: "application/json",
+                success:function (r) {
+                    var emails = r.obj;
+                    $("#directorEmail").empty();
+                    var option = "";
+                    if(emails.length==1){
+                        option += "<option  value='"+emails[0].email+"'>"+emails[0].email+"</option>";
+                    }else{
+                        for(var i=0;i<emails.length;i++){
+                            option += "<option  value='"+emails[i].email+"'>"+emails[i].email+"</option>";
+                        }
+                    }
+                    // console.log(option);
+                    $("#directorEmail").append(option);
                 }
             });
         });
