@@ -128,7 +128,7 @@ public class EmployeeApplyController extends BaseController {
 
     public boolean deleteLocalFile(String imgName,String imgSourceName){
         String imgPath = environment.getProperty("static.img.path");
-        String pathName = imgPath+"/"+imgName+"~"+imgSourceName;
+        String pathName = imgPath+imgName+"~"+imgSourceName;
         boolean flag = false;
         File file = new File(pathName);
         if (file.exists()&&file.isFile()){

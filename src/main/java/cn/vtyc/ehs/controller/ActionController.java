@@ -202,7 +202,7 @@ public class ActionController extends BaseController {
     public boolean deleteLocalFile(String imgName, String imgSourceName) {
         String imgPath = environment.getProperty("static.img.path");
         //windows
-        String pathName = imgPath + "" + imgName + "~" + imgSourceName;
+        String pathName = imgPath  + imgName + "~" + imgSourceName;
         //linux
 //        String pathName = imgPath+"/"+imgName+"~"+imgSourceName;
         boolean flag = false;
