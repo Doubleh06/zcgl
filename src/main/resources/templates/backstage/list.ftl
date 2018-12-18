@@ -72,7 +72,7 @@
                                     <button class="btn btn-success"  id="search" type="button" onclick="Backstage.search()">搜索</button>&nbsp
                                     <button class="btn btn-success" type="button" onclick="Backstage.resetSearch()">重置</button>&nbsp
                                     <#--<button class="btn btn-primary" type="button" onclick="Backstage.create()">新增</button>-->
-                                    <button class="btn btn-danger" type="button" onclick="Backstage.export()">导出</button>
+                                    <button class="control-auth btn btn-danger" data-auth="backstage_export" type="button" onclick="Backstage.export()">导出</button>
                                     <#--<button class="btn btn-primary" onclick="Qad.create()">新增</button>-->
                                 </div>
                             </div>

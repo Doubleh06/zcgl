@@ -52,23 +52,26 @@ Backstage.initOptions = function () {
                 var id = "'"+rowObject["id"]+"'";
                 var str = "";
                 if(""!=imgUrl&&null!=imgUrl){
-                    str += '<input type="button" class=" btn btn-sm btn-success"  value="照片查看" onclick="Backstage.photos(' + id + ')"/>&nbsp;';
+                    str += '<input type="button" class="control-auth btn btn-sm btn-success" data-auth="backstage_photos" value="照片查看" onclick="Backstage.photos(' + id + ')"/>&nbsp;';
                 }
-                    str += '<input type="button" class=" btn btn-sm btn-warning"  value="删除" onclick="Backstage.delete(' + id + ')"/>&nbsp;';
+
+                    str += '<input type="button" class="control-auth btn btn-sm btn-warning" data-auth="backstage_delete"  value="删除" onclick="Backstage.delete(' + id + ')"/>&nbsp;';
+
                 if(0==status){
-                    str += '<input type="button" class=" btn btn-sm btn-danger"  value="批准" onclick="Backstage.changeStatus(' + id +','+ 1 + ')"/>&nbsp;';
-                    str += '<input type="button" class=" btn btn-sm btn-danger"  value="拒绝" onclick="Backstage.changeStatus(' + id +','+ 2 +')"/>&nbsp;';
+                    str += '<input type="button" class="control-auth btn btn-sm btn-danger" data-auth="backstage_changeStatus"  value="批准" onclick="Backstage.changeStatus(' + id +','+ 1 + ')"/>&nbsp;';
+                    str += '<input type="button" class="control-auth btn btn-sm btn-danger" data-auth="backstage_changeStatus"  value="拒绝" onclick="Backstage.changeStatus(' + id +','+ 2 +')"/>&nbsp;';
                 }else if (1==status){
-                    str += '<input type="button" class=" btn btn-sm btn-info"  value="新增Action" onclick="Backstage.createAction(' + id +')"/>&nbsp;';
+                    str += '<input type="button" class="control-auth btn btn-sm btn-info" data-auth="backstage_createAction" value="新增Action" onclick="Backstage.createAction(' + id +')"/>&nbsp;';
                 }
                 if(0!=total){
-                    str += '<input type="button" class=" btn btn-sm btn-info"  value="查看Action" onclick="Backstage.seeAction(' + id +')"/>&nbsp;';
+                    str += '<input type="button" class="control-auth btn btn-sm btn-info" data-auth="backstage_seeAction" value="查看Action" onclick="Backstage.seeAction(' + id +')"/>&nbsp;';
                 }
-                // str += '<input type="button" class=" btn btn-sm btn-info"  value="编辑" onclick="Backstage.edit(' + id + ')"/>&nbsp;';
-                // str += '<input type="button" class=" btn btn-sm btn-danger"  value="删除" onclick="Backstage.delete(' + id + ')"/>';
                 return str;
             }}
-        ]
+        ],
+        gridComplete: function () {
+            refreshPermission(Backstage.domain);
+        }
     };
     return options;
 };
