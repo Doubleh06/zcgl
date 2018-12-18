@@ -20,7 +20,7 @@ public class TaskSchedule {
     @Autowired
     private Environment environment;
 //    @Scheduled(cron="0/3 * *  * * ? ")
-//    @Scheduled(cron = "0 0 7 * * ?")
+    @Scheduled(cron = "0 0 7 * * ?")
     public void sendMail()throws Exception{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String ehsEmail = environment.getProperty("mail.ehs");
