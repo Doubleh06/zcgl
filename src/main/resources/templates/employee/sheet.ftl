@@ -169,7 +169,7 @@
             dictInvalidFileType: "你不能上传该类型文件,文件类型只能是*.jpg,*.png,*.jpeg",
             dictFallbackMessage: "浏览器不受支持",
             dictFileTooBig: "文件过大上传文件最大支持.",
-            dictDefaultMessage: "<strong>点击此处上传图片 上传图片最大不能超过1M</strong>",
+            dictDefaultMessage: "<strong>点击此处上传图片 上传图片最大不能超过5M</strong>",
             init: function () {
                 myDropzone=this;
                 this.on("addedfile", function (file) {
