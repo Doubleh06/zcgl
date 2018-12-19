@@ -103,6 +103,8 @@ function input(title,text,fn){
             type: "input",
             showCancelButton: true,
             closeOnConfirm: false,
+            cancelButtonText: "取消",
+            confirmButtonText: "确定",
             inputPlaceholder: "请输入...",
         },fn);
 }
