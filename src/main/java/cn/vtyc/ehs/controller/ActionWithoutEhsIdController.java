@@ -98,9 +98,10 @@ public class ActionWithoutEhsIdController extends BaseController {
 
     @RequestMapping(value = "/close")
     @ResponseBody
-    public Result close(@RequestParam Integer id) {
+    public Result close(@RequestParam Integer id,@RequestParam String closeReason) {
         Action action = new Action();
         action.setId(id);
+        action.setCloseReason(closeReason);
         action.setCloseTime(new Date());
         actionDao.updateByPrimaryKeySelective(action);
         return OK;

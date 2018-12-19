@@ -153,8 +153,13 @@ ActionWithoutEhsId.delete = function (id) {
  * @param id    userId
  */
 ActionWithoutEhsId.close = function (id) {
-    warning("确定关闭吗？", "", function () {
-        $.get("/actionWithoutEhsId/close?id=" + id, function () {
+    input("确定关闭吗？", "请输入关闭理由", function (inputValue) {
+        if (inputValue === false) return false;
+        if (inputValue === "") {
+            swal.showInputError("内容不能为空，请输入关闭理由！");
+            return false
+        }
+        $.get("/actionWithoutEhsId/close?id=" + id+"&closeReason="+inputValue, function(){
             success("关闭成功");
             ActionWithoutEhsId.search();
         });

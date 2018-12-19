@@ -88,7 +88,7 @@ function successthen(title,text,url) {
 function error(title,text) {
     swal({
             title: title,
-            text: "",
+            text: text,
             type: "error",
             showCancelButton: false,
             confirmButtonColor: "#8CD4F5",
@@ -96,6 +96,19 @@ function error(title,text) {
             closeOnConfirm: false
         });
 }
+function input(title,text,fn){
+    swal({
+            title: title,
+            text: text,
+            type: "input",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            inputPlaceholder: "请输入...",
+        },fn);
+}
+
+
+
 //页面遮罩
 function waitMask() {
     $.blockUI({

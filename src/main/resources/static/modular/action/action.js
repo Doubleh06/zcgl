@@ -160,8 +160,13 @@ Action.delete = function (id) {
  * @param id    userId
  */
 Action.close = function (id) {
-    warning("确定关闭吗？", "", function () {
-        $.get("/action/close?id=" + id, function () {
+    input("确定关闭吗？", "请输入关闭理由", function (inputValue) {
+        if (inputValue === false) return false;
+        if (inputValue === "") {
+            swal.showInputError("内容不能为空，请输入关闭理由！");
+            return false
+        }
+        $.get("/action/close?id=" + id+"&closeReason="+inputValue, function(){
             success("关闭成功");
             Action.search();
         });

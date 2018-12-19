@@ -17,5 +17,6 @@ public class Action extends BaseEntity {
     private String address;
     private String email;
     private String directorEmail;
+    private String closeReason;
 
 }
