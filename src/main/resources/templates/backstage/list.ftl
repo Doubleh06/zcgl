@@ -159,6 +159,7 @@
                     var depts = r.obj;
                     $("#dept").empty();
                     var option = "";
+                    option += "<option  value=''>"+"---请选择---"+"</option>";
                     for(var i=0;i<depts.length;i++){
                         option += "<option  value='"+depts[i].dept+"'>"+depts[i].dept+"</option>";
                     }
