@@ -293,7 +293,7 @@ public class ActionWithoutEhsIdController extends BaseController {
         //获取数据
         List<Action> actionList = actionDao.selectAll();
         //excel 表头
-        String[] columns = new String[]{"ehsId", "行动描述", "责任人", "责任部门", "责任主管", "要求关闭时间", "实际关闭时间"};
+        String[] columns = new String[]{"ehsId", "行动描述", "责任人", "责任部门", "责任主管", "要求关闭时间", "实际关闭时间","关闭理由"};
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("Action: 报告列表");
@@ -314,6 +314,7 @@ public class ActionWithoutEhsIdController extends BaseController {
                 row.createCell(3).setCellValue(actionList.get(i).getResponsibleDept());
                 row.createCell(4).setCellValue(actionList.get(i).getResponsibleDirector());
                 row.createCell(5).setCellValue(sdf2.format(actionList.get(i).getCloseTime()));
+                row.createCell(6).setCellValue(sdf2.format(actionList.get(i).getCloseReason()));
                 String realCloseTime = "";
                 if (null != actionList.get(i).getRealCloseTime()) {
                     realCloseTime = sdf2.format(actionList.get(i).getRealCloseTime());
