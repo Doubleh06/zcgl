@@ -1,22 +1,23 @@
-var Action = {
+var ActionWithoutEhsId = {
     tableId: "#grid-table",
     pagerId: "#grid-pager",
     table: null,
-    domain: "action"
+    domain: "actionWithoutEhsId"
 };
 
 /**
  * jqGrid初始化参数
  */
-Action.initOptions = function () {
+ActionWithoutEhsId.initOptions = function () {
     var options = {
-        url : "/action/grid",
+        url : "/actionWithoutEhsId/grid",
         postData : {
             ehsId : $("#ehsId").val()
         },
         autowidth:true,
-        colNames: ['ehsId','描述', '负责人',"地址", '负责部门','负责主管','关闭时间','实际关闭时间','操作'],
+        colNames: ['id','ehsId','描述', '负责人',"地址", '负责部门','负责主管','关闭时间','实际关闭时间','操作'],
         colModel: [
+            {name: 'id', index: 'id', width: 20},
             {name: 'ehsId', index: 'ehsId', width: 20},
             {name: 'descriptive', index: 'descriptive', width: 80},
             {name: 'responsibleMan', index: 'responsibleMan', width: 60},
@@ -53,15 +54,15 @@ Action.initOptions = function () {
                 var realCloseTime = rowObject["realCloseTime"];
                 var str = "";
                 if(""!=imgUrl&&null!=imgUrl){
-                    str += '<input type="button" class=" btn btn-sm btn-success"  value="查看附件" onclick="Action.enclosure(' + id+","+ehsId + ')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-success"  value="查看附件" onclick="ActionWithoutEhsId.enclosure(' + id + ')"/>&nbsp;';
                 }
                 if (""==realCloseTime||null==realCloseTime){
-                    str += '<input type="button" class=" btn btn-sm btn-warning"  value="关闭" onclick="Action.close(' + id + ')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-warning"  value="关闭" onclick="ActionWithoutEhsId.close(' + id + ')"/>&nbsp;';
                 }
 
 
-                // str += '<input type="button" class=" btn btn-sm btn-info"  value="编辑" onclick="Action.edit(' + id + ')"/>&nbsp;';
-                // str += '<input type="button" class=" btn btn-sm btn-danger"  value="删除" onclick="Action.delete(' + id + ')"/>';
+                // str += '<input type="button" class=" btn btn-sm btn-info"  value="编辑" onclick="ActionWithoutEhsId.edit(' + id + ')"/>&nbsp;';
+                // str += '<input type="button" class=" btn btn-sm btn-danger"  value="删除" onclick="ActionWithoutEhsId.delete(' + id + ')"/>';
                 return str;
             }}
         ],
@@ -89,53 +90,45 @@ Action.initOptions = function () {
 /**
  * 根据关键词搜索
  */
-Action.search = function () {
+ActionWithoutEhsId.search = function () {
     var searchParam = {};
     searchParam.responsibleMan = $("#responsibleMan").val();
     searchParam.responsibleDept = $("#responsibleDept").val();
     searchParam.responsibleDirector = $("#responsibleDirector").val();
     searchParam.address = $("#address").val();
-    Action.table.reload(searchParam);
+    ActionWithoutEhsId.table.reload(searchParam);
 };
 
 /**
  * 重置搜索
  */
-Action.resetSearch = function () {
+ActionWithoutEhsId.resetSearch = function () {
     $("#responsibleMan").val("");
-    // $("#responsibleDept").val("---请选择---");
     $("#responsibleDirector").val("");
     $("#address").empty();
     $("#address").append("<option value=''>---请选择---</option> <option value='CZ' >常州</option><option value='CQ'>重庆</option>");
-    $("#responsibleDept").empty();//find("option[value='']").attr("selected",true);
+    // $("#address").find("option[value='']").attr("selected",true);
+    $("#responsibleDept").empty();
     $("#responsibleDept").append("<option value=''>---请选择---</option>");
-    Action.search();
+    ActionWithoutEhsId.search();
 };
-
 /**
- *新增
+ *附件查看
  */
-Action.enclosure = function (id,ehsId) {
-    window.location.href = "/action/enclosureAction?id="+id+"&ehsId="+ehsId;
+ActionWithoutEhsId.create = function () {
+    window.location.href = "/actionWithoutEhsId/createAction";
+}
+/**
+ *附件查看
+ */
+ActionWithoutEhsId.enclosure = function (id) {
+    window.location.href = "/actionWithoutEhsId/enclosureAction?id="+id;
 }
 /**
  * 导出
  */
-Action.export = function (ehsId) {
-    window.location.href = "/action/export?ehsId="+ehsId;
-
-    // $("#exportModal").modal();
-    // $.ajax({
-    //     type : 'POST',
-    //     url: '/Action/export',
-    //     contentType : "application/json" ,
-    //     // data : JSON.stringify({
-    //     //     "keys" : keys
-    //     // }),
-    //     success : function(data) {
-    //          window.open("/leads/download?key="+data.obj);
-    //     }
-    // });
+ActionWithoutEhsId.export = function () {
+    window.location.href = "/actionWithoutEhsId/export";
 }
 
 
@@ -145,11 +138,11 @@ Action.export = function (ehsId) {
  *
  * @param id    userId
  */
-Action.delete = function (id) {
+ActionWithoutEhsId.delete = function (id) {
     warning("确定删除吗", "", function () {
-        $.get("/action/delete?id=" + id, function () {
+        $.get("/actionWithoutEhsId/delete?id=" + id, function () {
             success("成功删除");
-            Action.search();
+            ActionWithoutEhsId.search();
         });
     })
 };
@@ -159,16 +152,16 @@ Action.delete = function (id) {
  *
  * @param id    userId
  */
-Action.close = function (id) {
+ActionWithoutEhsId.close = function (id) {
     warning("确定关闭吗？", "", function () {
-        $.get("/action/close?id=" + id, function () {
+        $.get("/actionWithoutEhsId/close?id=" + id, function () {
             success("关闭成功");
-            Action.search();
+            ActionWithoutEhsId.search();
         });
     })
 };
 
-Action.insert = function (btn) {
+ActionWithoutEhsId.insert = function (btn) {
     var email = $("#email").val();
     if(null==email||""==email){
         error("责任人邮件地址不能为空");
@@ -179,20 +172,20 @@ Action.insert = function (btn) {
         error("责任主管邮件地址不能为空");
         return;
     }
-    var action = getFormJson($("#create-form"));
+    var actionWithoutEhsId = getFormJson($("#create-form"));
     var l = $(btn).ladda();
     l.ladda('start');
     $.ajax({
-        url: "/action/insert",
+        url: "/actionWithoutEhsId/insert",
         type: 'POST',
-        data: JSON.stringify(action),
+        data: JSON.stringify(actionWithoutEhsId),
         contentType: "application/json;charset=utf-8",
         dataType: "json",
         success: function (r) {
             if (r.code === 0) {
                 // $("#createModal").modal("hide");
                 l.ladda('stop');
-                successthen("保存成功",null,"/backstage/list");
+                successthen("保存成功",null,"/actionWithout/seeAction");
                 // $("#create-form")[0].reset();
             }
         }
@@ -240,7 +233,7 @@ function dateDiff(date) { //author: meizz
 
 $(function() {
     $('.chosen-select').chosen({width: "100%"});
-    var jqGrid = new JqGrid("#grid-table", "#grid-pager", Action.initOptions());
-    Action.table = jqGrid.init();
+    var jqGrid = new JqGrid("#grid-table", "#grid-pager", ActionWithoutEhsId.initOptions());
+    ActionWithoutEhsId.table = jqGrid.init();
 
 });

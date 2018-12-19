@@ -3,28 +3,28 @@ package cn.vtyc.ehs.controller;
 import cn.vtyc.ehs.core.JSONResult;
 import cn.vtyc.ehs.core.Result;
 import cn.vtyc.ehs.core.jqGrid.JqGridResult;
-import cn.vtyc.ehs.dao.*;
+import cn.vtyc.ehs.dao.ActionDao;
+import cn.vtyc.ehs.dao.EhsDao;
+import cn.vtyc.ehs.dao.Image2Dao;
+import cn.vtyc.ehs.dao.PersonInfoDao;
 import cn.vtyc.ehs.dto.ActionDto;
 import cn.vtyc.ehs.dto.ActionJqGridParam;
-import cn.vtyc.ehs.dto.EhsDto;
-import cn.vtyc.ehs.dto.EhsJqGridParam;
-import cn.vtyc.ehs.entity.*;
+import cn.vtyc.ehs.entity.Action;
+import cn.vtyc.ehs.entity.Ehs;
+import cn.vtyc.ehs.entity.Image2;
+import cn.vtyc.ehs.entity.PersonInfo;
 import cn.vtyc.ehs.service.ActionService;
+import cn.vtyc.ehs.service.ActionWithoutEhsIdService;
 import cn.vtyc.ehs.service.DeptService;
-import cn.vtyc.ehs.service.EhsService;
 import cn.vtyc.ehs.util.MailUtil;
 import cn.vtyc.ehs.util.MyFileUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,13 +39,13 @@ import java.util.*;
 
 
 @Controller
-@RequestMapping(value = "/action")
-public class ActionController extends BaseController {
+@RequestMapping(value = "/actionWithoutEhsId")
+public class ActionWithoutEhsIdController extends BaseController {
 
     @Autowired
     private DeptService deptService;
     @Autowired
-    private ActionService actionService;
+    private ActionWithoutEhsIdService actionWithoutEhsIdService;
     @Autowired
     private EhsDao ehsDao;
     @Autowired
@@ -60,16 +60,15 @@ public class ActionController extends BaseController {
 
     /**************************************************查看Action*********************************************************/
     @RequestMapping(value = "/seeAction")
-    public String list(Model model, @RequestParam Integer id) {
-        model.addAttribute("menus", getMenus("backstage"));
-        model.addAttribute("ehsId", id);
-        return "/action/seeAction";
+    public String list(Model model) {
+        model.addAttribute("menus", getMenus("actionWithoutEhsId"));
+        return "/actionWithoutEhsId/seeAction";
     }
 
     @RequestMapping(value = "/grid")
     @ResponseBody
     public Result grid(ActionJqGridParam param) {
-        PageInfo<Action> pageInfo = actionService.selectByJqGridParam(param);
+        PageInfo<Action> pageInfo = actionWithoutEhsIdService.selectByJqGridParam(param);
         JqGridResult<Action> result = new JqGridResult<>();
         //当前页
         result.setPage(pageInfo.getPageNum());
@@ -109,14 +108,13 @@ public class ActionController extends BaseController {
 
     /**************************************************创建Action*********************************************************/
     @RequestMapping(value = "/createAction")
-    public String photos(Model model, @RequestParam Integer id) {
-        model.addAttribute("menus", getMenus("backstage"));
+    public String photos(Model model) {
+        model.addAttribute("menus", getMenus("actionWithoutEhsId"));
         model.addAttribute("uuid", UUID.randomUUID());
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         model.addAttribute("today", sdf.format(new Date()));
         model.addAttribute("depts", deptService.getAddressArray("CZ"));
-        model.addAttribute("ehsId", id);
-        return "/action/createAction";
+        return "/actionWithoutEhsId/createAction";
     }
 
     @RequestMapping(value = "insert")
@@ -220,18 +218,17 @@ public class ActionController extends BaseController {
     }
     /**************************************************Action附件*********************************************************/
     @RequestMapping(value = "/enclosureAction")
-    public String enclosure(Model model, @RequestParam Integer id, @RequestParam Integer ehsId) {
-        model.addAttribute("menus", getMenus("backstage"));
+    public String enclosure(Model model, @RequestParam Integer id) {
+        model.addAttribute("menus", getMenus("actionWithoutEhsId"));
         model.addAttribute("id", id);
-        model.addAttribute("ehsId", ehsId);
-        return "/action/enclosureAction";
+        return "/actionWithoutEhsId/enclosureAction";
     }
 
 
     @RequestMapping(value = "/enclosure/grid")
     @ResponseBody
     public Result enclosureGrid(@RequestParam Integer id) {
-        PageInfo<Map> pageInfo = actionService.selectByJqGridParam2(id);
+        PageInfo<Map> pageInfo = actionWithoutEhsIdService.selectByJqGridParam2(id);
         JqGridResult<Map> result = new JqGridResult<>();
         //当前页
         result.setPage(pageInfo.getPageNum());
@@ -290,19 +287,15 @@ public class ActionController extends BaseController {
 
     @RequestMapping(value = "export")
     @ResponseBody
-    public void export(HttpServletResponse response, @RequestParam Integer ehsId) throws IOException {
+    public void export(HttpServletResponse response) throws IOException {
 
-        StringBuffer sb = new StringBuffer();
-        sb.append("where ehs_id = ").append(ehsId);
         //获取数据
-        List<Action> actionList = actionDao.selectActionList(sb.toString());
+        List<Action> actionList = actionDao.selectAll();
         //excel 表头
         String[] columns = new String[]{"ehsId", "行动描述", "责任人", "责任部门", "责任主管", "要求关闭时间", "实际关闭时间"};
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         HSSFWorkbook wb = new HSSFWorkbook();
-        HSSFSheet sheet = wb.createSheet("Action:" + ehsId + "报告列表");
+        HSSFSheet sheet = wb.createSheet("Action: 报告列表");
 
         //创建表头
         HSSFRow header = sheet.createRow(0);
@@ -332,7 +325,7 @@ public class ActionController extends BaseController {
 
         OutputStream output = response.getOutputStream();
         response.reset();
-        response.setHeader("Content-disposition", "attachment; filename=EHS.xls");
+        response.setHeader("Content-disposition", "attachment; filename=Action.xls");
         response.setContentType("application/msexcel");
         wb.write(output);
         output.close();
