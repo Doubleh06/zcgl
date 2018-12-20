@@ -58,8 +58,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+\        </div>
     <#include "/templates/layout/footer.ftl">
     </div>
 </div>

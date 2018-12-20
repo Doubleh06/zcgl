@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -68,6 +69,17 @@ public class ActionService extends AbstractService<Action> {
         }
         if(StringUtils.isNotEmpty(param.getResponsibleDirector())){
             sql.append(" and responsible_director like '%").append(param.getResponsibleDirector()).append("%'");
+        }
+        if (StringUtils.isNotEmpty(param.getStartDate())&&StringUtils.isNotEmpty(param.getEndDate())){
+            //时间字符串格式造型
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                Date startDate = sdf.parse(param.getStartDate() + " 00:00:00");
+                Date endDate = sdf.parse(param.getEndDate() + " 23:59:59");
+                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                sql.append(" and close_time between '").append(sdf2.format(startDate)).append("' and '").append(sdf2.format(endDate)).append("'");
+            }catch (Exception e){
+            }
         }
         //获取ehs信息
         List<Action> actionList = actionDao.selectActionList(sql.toString());

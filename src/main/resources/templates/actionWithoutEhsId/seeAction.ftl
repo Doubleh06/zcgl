@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 
 <head>
 <#include "/templates/layout/meta.ftl">
@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/css/bootstrap-datetimepicker.min.css" />
     <link href="/static/css/plugins/select2/select2.min.css" rel="stylesheet">
     <link href="/static/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="/static/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
     <link href="/static/css/style.css" rel="stylesheet">
 </head>
 
@@ -32,7 +33,6 @@
                 </ol>
             </div>
             <div class="col-lg-2">
-
             </div>
         </div>
 
@@ -43,7 +43,7 @@
                         <div class="ibox-content">
                             <div class="bar search-bar">
                                 <div class="form-inline">
-                                    <div class="form-group">
+                                    <div class="form-group" id="dataRange">
                                         <label>负责人</label>
                                         <input type="text" class="form-control" id="responsibleMan" style="width: 150px;">
                                         <#--<input type="hidden" class="form-control" id="ehsId" value="${ehsId}">-->
@@ -62,6 +62,13 @@
                                         &nbsp&nbsp&nbsp
                                         <label>负责主管</label>
                                         <input type="text" class="form-control" id="responsibleDirector" style="width: 150px;">
+                                        &nbsp&nbsp&nbsp
+                                        <label>时间段</label>
+                                        <div class="input-daterange input-group" id="datepicker">
+                                            <input type="text" class="input-sm form-control" name="startDate"  id="startDate"/>
+                                            <span class="input-group-addon">to</span>
+                                            <input type="text" class="input-sm form-control" name="startDate"  id="endDate"/>
+                                        </div>
                                     </div>
                                     &nbsp&nbsp&nbsp
 
@@ -80,7 +87,7 @@
                                 <div id="grid-pager"></div>
                             </div>
                         </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -89,12 +96,16 @@
 </div>
 
 
-<#--分配角色弹框-->
 <#include "/templates/layout/commonjs.ftl">
 <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
 <script src="/static/js/plugins/chosen/chosen.jquery.js"></script>
 <script src="/static/js/plugins/select2/select2.full.min.js"></script>
 <script src="/static/modular/actionWithoutEhsId/action.js"></script>
+<script src="/static/js/plugins/jsKnob/jquery.knob.js"></script>
+<script src="/static/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+<script src="/static/js/plugins/cropper/cropper.min.js"></script>
+<script src="/static/js/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="/static/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -114,6 +125,11 @@
                     $("#responsibleDept").append(option);
                 }
             });
+        });
+        $('#dataRange .input-daterange').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true
         });
     });
 </script>

@@ -110,7 +110,7 @@
                             </div>
                             <div class="col-sm-5">
                                 <div class="input-group clockpicker" data-autoclose="true">
-                                    <input type="text" class="form-control" placeholder="xx:xx" id="closeTime" name="closeTime">
+                                    <input type="text" class="form-control" value="23:59" id="closeTime" name="closeTime">
                                     <span class="input-group-addon">
                                     <span class="fa fa-clock-o"></span>
                                 </span>

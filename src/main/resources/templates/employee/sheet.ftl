@@ -139,8 +139,6 @@
                 </div>
             </div>
         </div>
-        <hr/>
-
     </div>
     <#include "/templates/layout/commonjs.ftl">
     <script src="/static/js/plugins/chosen/chosen.jquery.js"></script>

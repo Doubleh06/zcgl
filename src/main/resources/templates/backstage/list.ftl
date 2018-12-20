@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/css/bootstrap-datetimepicker.min.css" />
     <link href="/static/css/plugins/select2/select2.min.css" rel="stylesheet">
     <link href="/static/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="/static/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
     <link href="/static/css/style.css" rel="stylesheet">
 </head>
 
@@ -40,7 +41,7 @@
                         <div class="ibox-content">
                             <div class="bar search-bar">
                                 <div class="form-inline">
-                                    <div class="form-group">
+                                    <div class="form-group" id="dataRange">
                                         <label>涉及人员</label>
                                         <input type="text" class="form-control" id="accidentMan" style="width: 150px;">
                                         &nbsp&nbsp&nbsp
@@ -66,7 +67,15 @@
                                                 <option value="${accidentType.id}">${accidentType.name}</option>
                                              </#list>
                                         </select>
+                                        &nbsp&nbsp&nbsp
+                                        <label>时间段</label>
+                                        <div class="input-daterange input-group" id="datepicker">
+                                            <input type="text" class="input-sm form-control" name="startDate"  id="startDate"/>
+                                            <span class="input-group-addon">to</span>
+                                            <input type="text" class="input-sm form-control" name="startDate"  id="endDate"/>
+                                        </div>
                                     </div>
+
                                     &nbsp&nbsp&nbsp
 
                                     <button class="btn btn-success"  id="search" type="button" onclick="Backstage.search()">搜索</button>&nbsp
@@ -87,66 +96,22 @@
                     </div>
                 </div>
             </div>
-        </div>
-    <#include "/templates/layout/footer.ftl">
+        <#include "/templates/layout/footer.ftl">
     </div>
 </div>
 
-<#--&lt;#&ndash;导出弹框&ndash;&gt;-->
-<#--<div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">-->
-    <#--<div class="modal-dialog">-->
-        <#--<div class="modal-content">-->
-            <#--<div class="modal-header">-->
-                <#--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
-                <#--<h4 class="modal-title" id="modalTitle">导出excel</h4>-->
-            <#--</div>-->
-            <#--<div class="modal-body">-->
-                <#--<form class="form-horizontal" id="export-form">-->
-                    <#--<div class="form-group">-->
-                        <#--<label class="col-sm-3 control-label">ip</label>-->
-                        <#--<div class="col-sm-9">-->
-                            <#--<div class="checkbox checkbox-success">-->
-                                <#--<input id="checkbox2" name="" type="checkbox" checked="">-->
-                                <#--<label for="checkbox2">-->
-                                    <#--Primary-->
-                                <#--</label>-->
-                            <#--</div>-->
-                        <#--</div>-->
-                    <#--</div>-->
-                    <#--<div class="form-group">-->
-                        <#--<label class="col-sm-3 control-label">端口</label>-->
-                        <#--<div class="col-sm-9">-->
-                            <#--<input type="text" class="form-control" name="port">-->
-                        <#--</div>-->
-                    <#--</div>-->
-                    <#--<div class="form-group">-->
-                        <#--<label class="col-sm-3 control-label">终端服务器ip</label>-->
-                        <#--<div class="col-sm-9">-->
-                            <#--<input type="text" class="form-control" name="terminalIp">-->
-                        <#--</div>-->
-                    <#--</div>-->
-                    <#--<div class="form-group">-->
-                        <#--<label class="col-sm-3 control-label">最大并发</label>-->
-                        <#--<div class="col-sm-9">-->
-                            <#--<input type="text" class="form-control" name="maxline">-->
-                        <#--</div>-->
-                    <#--</div>-->
-                <#--</form>-->
 
-            <#--</div>-->
-            <#--<div class="modal-footer">-->
-                <#--<button type="button" class="btn btn-sm btn-primary" onclick="backstage.insert()">确定</button>-->
-                <#--<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>-->
-            <#--</div>-->
-        <#--</div><!-- /.modal-content &ndash;&gt;-->
-    <#--</div><!-- /.modal &ndash;&gt;-->
-<#--</div>-->
 <#--分配角色弹框-->
 <#include "/templates/layout/commonjs.ftl">
 <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
 <script src="/static/js/plugins/chosen/chosen.jquery.js"></script>
 <script src="/static/js/plugins/select2/select2.full.min.js"></script>
 <script src="/static/modular/backstage/backstage.js"></script>
+<script src="/static/js/plugins/jsKnob/jquery.knob.js"></script>
+<script src="/static/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+<script src="/static/js/plugins/cropper/cropper.min.js"></script>
+<script src="/static/js/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="/static/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -166,6 +131,11 @@
                     $("#dept").append(option);
                 }
             });
+        });
+        $('#dataRange .input-daterange').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true
         });
     });
 </script>

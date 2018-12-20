@@ -85,7 +85,8 @@ Backstage.search = function () {
     searchParam.dept = $("#dept").val();
     searchParam.accidentType = $("#accidentType").val();
     searchParam.address = $("#address").val();
-    console.log(searchParam);
+    searchParam.startDate = $("#startDate").val();
+    searchParam.endDate = $("#endDate").val();
     Backstage.table.reload(searchParam);
 };
 

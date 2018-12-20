@@ -95,6 +95,8 @@ Action.search = function () {
     searchParam.responsibleDept = $("#responsibleDept").val();
     searchParam.responsibleDirector = $("#responsibleDirector").val();
     searchParam.address = $("#address").val();
+    searchParam.startDate = $("#startDate").val();
+    searchParam.endDate = $("#endDate").val();
     Action.table.reload(searchParam);
 };
 
@@ -109,6 +111,8 @@ Action.resetSearch = function () {
     $("#address").append("<option value=''>---请选择---</option> <option value='CZ' >常州</option><option value='CQ'>重庆</option>");
     $("#responsibleDept").empty();//find("option[value='']").attr("selected",true);
     $("#responsibleDept").append("<option value=''>---请选择---</option>");
+    $("#startDate").val("");
+    $("#endDate").val("");
     Action.search();
 };
 

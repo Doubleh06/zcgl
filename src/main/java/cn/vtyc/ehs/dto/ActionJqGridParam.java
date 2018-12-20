@@ -15,5 +15,6 @@ public class ActionJqGridParam extends JqGridParam {
     private String responsibleMan;
     private String responsibleDept;
     private String responsibleDirector ;
-
+    private String startDate;
+    private String endDate;
 }

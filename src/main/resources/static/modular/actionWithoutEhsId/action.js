@@ -96,6 +96,8 @@ ActionWithoutEhsId.search = function () {
     searchParam.responsibleDept = $("#responsibleDept").val();
     searchParam.responsibleDirector = $("#responsibleDirector").val();
     searchParam.address = $("#address").val();
+    searchParam.startDate = $("#startDate").val();
+    searchParam.endDate = $("#endDate").val();
     ActionWithoutEhsId.table.reload(searchParam);
 };
 
@@ -107,9 +109,10 @@ ActionWithoutEhsId.resetSearch = function () {
     $("#responsibleDirector").val("");
     $("#address").empty();
     $("#address").append("<option value=''>---请选择---</option> <option value='CZ' >常州</option><option value='CQ'>重庆</option>");
-    // $("#address").find("option[value='']").attr("selected",true);
     $("#responsibleDept").empty();
     $("#responsibleDept").append("<option value=''>---请选择---</option>");
+    $("#startDate").val("");
+    $("#endDate").val("");
     ActionWithoutEhsId.search();
 };
 /**
@@ -190,7 +193,7 @@ ActionWithoutEhsId.insert = function (btn) {
             if (r.code === 0) {
                 // $("#createModal").modal("hide");
                 l.ladda('stop');
-                successthen("保存成功",null,"/actionWithout/seeAction");
+                successthen("保存成功",null,"/actionWithoutEhsId/seeAction");
                 // $("#create-form")[0].reset();
             }
         }

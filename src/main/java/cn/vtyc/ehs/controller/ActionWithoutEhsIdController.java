@@ -9,6 +9,7 @@ import cn.vtyc.ehs.dao.Image2Dao;
 import cn.vtyc.ehs.dao.PersonInfoDao;
 import cn.vtyc.ehs.dto.ActionDto;
 import cn.vtyc.ehs.dto.ActionJqGridParam;
+import cn.vtyc.ehs.dto.ActionWithoutEhsIdJqGridParam;
 import cn.vtyc.ehs.entity.Action;
 import cn.vtyc.ehs.entity.Ehs;
 import cn.vtyc.ehs.entity.Image2;
@@ -62,12 +63,19 @@ public class ActionWithoutEhsIdController extends BaseController {
     @RequestMapping(value = "/seeAction")
     public String list(Model model) {
         model.addAttribute("menus", getMenus("actionWithoutEhsId"));
+//        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+//        Calendar c = Calendar.getInstance();
+//        Date date = new Date();
+//        c.setTime(date);
+//        c.add(Calendar.MONTH,-1);
+//        model.addAttribute("startDate", sdf.format(c.getTime()));
+//        model.addAttribute("endDate", sdf.format(date));
         return "/actionWithoutEhsId/seeAction";
     }
 
     @RequestMapping(value = "/grid")
     @ResponseBody
-    public Result grid(ActionJqGridParam param) {
+    public Result grid(ActionWithoutEhsIdJqGridParam param) {
         PageInfo<Action> pageInfo = actionWithoutEhsIdService.selectByJqGridParam(param);
         JqGridResult<Action> result = new JqGridResult<>();
         //当前页

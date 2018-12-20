@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +70,18 @@ public class EhsService extends AbstractService<Ehs> {
         if(null!=param.getAccidentType()){
             sql.append(" and accident_type = ").append(param.getAccidentType());
         }
+        if (StringUtils.isNotEmpty(param.getStartDate())&&StringUtils.isNotEmpty(param.getEndDate())){
+            //时间字符串格式造型
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                Date startDate = sdf.parse(param.getStartDate() + " 00:00:00");
+                Date endDate = sdf.parse(param.getEndDate() + " 23:59:59");
+                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                sql.append(" and accident_time between '").append(sdf2.format(startDate)).append("' and '").append(sdf2.format(endDate)).append("'");
+            }catch (Exception e){
+            }
+        }
+
         //获取事故种类信息
         List<AccidentType> accidentTypeList = accidentTypeDao.selectAll();
         //获取ehs信息
