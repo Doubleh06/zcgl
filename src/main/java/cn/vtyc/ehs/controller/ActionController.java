@@ -4,10 +4,7 @@ import cn.vtyc.ehs.core.JSONResult;
 import cn.vtyc.ehs.core.Result;
 import cn.vtyc.ehs.core.jqGrid.JqGridResult;
 import cn.vtyc.ehs.dao.*;
-import cn.vtyc.ehs.dto.ActionDto;
-import cn.vtyc.ehs.dto.ActionJqGridParam;
-import cn.vtyc.ehs.dto.EhsDto;
-import cn.vtyc.ehs.dto.EhsJqGridParam;
+import cn.vtyc.ehs.dto.*;
 import cn.vtyc.ehs.entity.*;
 import cn.vtyc.ehs.service.ActionService;
 import cn.vtyc.ehs.service.DeptService;
@@ -41,7 +38,7 @@ import java.util.*;
 @Controller
 @RequestMapping(value = "/action")
 public class ActionController extends BaseController {
-
+    private List<Action> list = new ArrayList<>();
     @Autowired
     private DeptService deptService;
     @Autowired
@@ -288,22 +285,25 @@ public class ActionController extends BaseController {
         }
     }
 
+    @RequestMapping(value = "prepareExportData")
+    @ResponseBody
+    public Result export(@RequestBody ActionJqGridParam param) {
+
+//        ActionJqGridParam param = new ActionJqGridParam(Integer.parseInt(jsonObject.getString("ehsId")),jsonObject.getString("address"),jsonObject.getString("responsibleMan"),jsonObject.getString("responsibleDept")
+//                ,jsonObject.getString("responsibleDirector"),jsonObject.getString("startDate"),jsonObject.getString("endDate"),jsonObject.getString("status1"),jsonObject.getString("status2"));
+        list = actionService.selectListByJqGridParam(param);
+        return  OK;
+    }
 
     @RequestMapping(value = "export")
     @ResponseBody
-    public void export(HttpServletResponse response, @RequestParam Integer ehsId) throws IOException {
+    public Result export(HttpServletResponse response) throws IOException {
 
-        StringBuffer sb = new StringBuffer();
-        sb.append("where ehs_id = ").append(ehsId);
-        //获取数据
-        List<Action> actionList = actionDao.selectActionList(sb.toString());
         //excel 表头
         String[] columns = new String[]{"ehsId", "行动描述", "责任人", "责任部门", "责任主管", "要求关闭时间", "实际关闭时间"};
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         HSSFWorkbook wb = new HSSFWorkbook();
-        HSSFSheet sheet = wb.createSheet("Action:" + ehsId + "报告列表");
+        HSSFSheet sheet = wb.createSheet("Action-报告列表");
 
         //创建表头
         HSSFRow header = sheet.createRow(0);
@@ -312,32 +312,32 @@ public class ActionController extends BaseController {
         }
 
         //i-行   j-列
-        for (int i = 0; i < actionList.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             HSSFRow row = sheet.createRow(i + 1);
             for (int j = 0; j < columns.length; j++) {
-                row.createCell(0).setCellValue(actionList.get(i).getEhsId());
-                row.createCell(1).setCellValue(actionList.get(i).getDescriptive());
-                row.createCell(2).setCellValue(actionList.get(i).getResponsibleMan());
-                row.createCell(3).setCellValue(actionList.get(i).getResponsibleDept());
-                row.createCell(4).setCellValue(actionList.get(i).getResponsibleDirector());
-                row.createCell(5).setCellValue(sdf2.format(actionList.get(i).getCloseTime()));
+                row.createCell(0).setCellValue(list.get(i).getEhsId());
+                row.createCell(1).setCellValue(list.get(i).getDescriptive());
+                row.createCell(2).setCellValue(list.get(i).getResponsibleMan());
+                row.createCell(3).setCellValue(list.get(i).getResponsibleDept());
+                row.createCell(4).setCellValue(list.get(i).getResponsibleDirector());
+                row.createCell(5).setCellValue(sdf2.format(list.get(i).getCloseTime()));
                 String realCloseTime = "";
-                if (null != actionList.get(i).getRealCloseTime()) {
-                    realCloseTime = sdf2.format(actionList.get(i).getRealCloseTime());
+                if (null != list.get(i).getRealCloseTime()) {
+                    realCloseTime = sdf2.format(list.get(i).getRealCloseTime());
                 }
                 row.createCell(6).setCellValue(realCloseTime);
 
             }
         }
 
-
         OutputStream output = response.getOutputStream();
         response.reset();
         response.setHeader("Content-disposition", "attachment; filename=EHS.xls");
         response.setContentType("application/msexcel");
         wb.write(output);
+        list.clear();
         output.close();
-
+        return OK;
     }
 
 }

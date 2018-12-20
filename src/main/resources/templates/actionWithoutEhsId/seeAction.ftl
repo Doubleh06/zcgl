@@ -43,7 +43,7 @@
                         <div class="ibox-content">
                             <div class="bar search-bar">
                                 <div class="form-inline">
-                                    <div class="form-group" id="dataRange">
+                                    <div class="form-group">
                                         <label>负责人</label>
                                         <input type="text" class="form-control" id="responsibleMan" style="width: 150px;">
                                         <#--<input type="hidden" class="form-control" id="ehsId" value="${ehsId}">-->
@@ -63,13 +63,31 @@
                                         <label>负责主管</label>
                                         <input type="text" class="form-control" id="responsibleDirector" style="width: 150px;">
                                         &nbsp&nbsp&nbsp
-                                        <label>时间段</label>
+                                        <label>状态1</label>
+                                        <select class="form-control" id="status1">
+                                            <option value="">全部</option>
+                                            <option value="1" >已关闭</option>
+                                            <option value="2">未关闭</option>
+                                        </select>
+                                        &nbsp&nbsp&nbsp
+                                        <label>状态2</label>
+                                        <select class="form-control" id="status2">
+                                            <option value="">全部</option>
+                                            <option value="1" >超期1-7天</option>
+                                            <option value="2">超期7天以上</option>
+                                        </select>
+                                        &nbsp&nbsp&nbsp
+                                    </div>
+                                    <div class="form-group" id="dataRange">
+                                        <label>关闭时间段</label>
                                         <div class="input-daterange input-group" id="datepicker">
                                             <input type="text" class="input-sm form-control" name="startDate"  id="startDate"/>
                                             <span class="input-group-addon">to</span>
                                             <input type="text" class="input-sm form-control" name="startDate"  id="endDate"/>
                                         </div>
                                     </div>
+                                    <br>
+                                    <br>
                                     &nbsp&nbsp&nbsp
 
                                     <button class="btn btn-success"  id="search" type="button" onclick="ActionWithoutEhsId.search()">搜索</button>&nbsp

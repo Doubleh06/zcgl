@@ -77,7 +77,7 @@ public class EhsService extends AbstractService<Ehs> {
                 Date startDate = sdf.parse(param.getStartDate() + " 00:00:00");
                 Date endDate = sdf.parse(param.getEndDate() + " 23:59:59");
                 SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                sql.append(" and accident_time between '").append(sdf2.format(startDate)).append("' and '").append(sdf2.format(endDate)).append("'");
+                sql.append(" and submit_time between '").append(sdf2.format(startDate)).append("' and '").append(sdf2.format(endDate)).append("'");
             }catch (Exception e){
             }
         }
@@ -98,6 +98,51 @@ public class EhsService extends AbstractService<Ehs> {
             ehs.put("total_action",actionDao.getTotalById(Integer.parseInt(ehs.get("id").toString())));
         }
         return new PageInfo<>(ehsList);
+    }
+
+    public List<Map> selectListByJqGridParam(EhsJqGridParam param ){
+        StringBuilder sql = new StringBuilder();
+        sql.append(" where 1 = 1 ");
+        if(StringUtils.isNotEmpty(param.getAccidentMan())){
+            sql.append(" and accident_man like '%").append(param.getAccidentMan()).append("%'");
+        }
+        if(StringUtils.isNotEmpty(param.getAddress())){
+            sql.append(" and address = '").append(param.getAddress()).append("'");
+        }
+        if(StringUtils.isNotEmpty(param.getDept())){
+            sql.append(" and dept like '%").append(param.getDept()).append("%'");
+        }
+        if(null!=param.getAccidentType()){
+            sql.append(" and accident_type = ").append(param.getAccidentType());
+        }
+        if (StringUtils.isNotEmpty(param.getStartDate())&&StringUtils.isNotEmpty(param.getEndDate())){
+            //时间字符串格式造型
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                Date startDate = sdf.parse(param.getStartDate() + " 00:00:00");
+                Date endDate = sdf.parse(param.getEndDate() + " 23:59:59");
+                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                sql.append(" and submit_time between '").append(sdf2.format(startDate)).append("' and '").append(sdf2.format(endDate)).append("'");
+            }catch (Exception e){
+            }
+        }
+
+        //获取事故种类信息
+        List<AccidentType> accidentTypeList = accidentTypeDao.selectAll();
+        //获取ehs信息
+        List<Map> ehsList = ehsDao.selectEhsList(sql.toString());
+
+
+        //获取用户信息
+        for(Map ehs : ehsList){
+            for(AccidentType accidentType : accidentTypeList){
+                if(Integer.parseInt(ehs.get("accident_type").toString())==accidentType.getId()){
+                    ehs.put("accident_type_name",accidentType.getName());
+                }
+            }
+            ehs.put("total_action",actionDao.getTotalById(Integer.parseInt(ehs.get("id").toString())));
+        }
+        return ehsList;
     }
 
     public List<String> getImgUrl(Integer id){

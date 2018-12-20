@@ -16,5 +16,7 @@ public class ActionWithoutEhsIdJqGridParam extends JqGridParam {
     private String responsibleDirector ;
     private String startDate;
     private String endDate;
+    private String status1;
+    private String status2;
 
 }

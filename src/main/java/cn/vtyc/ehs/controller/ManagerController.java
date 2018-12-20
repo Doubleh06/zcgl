@@ -12,13 +12,16 @@ import cn.vtyc.ehs.entity.Ehs;
 import cn.vtyc.ehs.service.DeptService;
 import cn.vtyc.ehs.service.EhsService;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.mysql.cj.xdevapi.JsonArray;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,9 +39,7 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/backstage")
 public class ManagerController extends BaseController {
-
-    @Autowired
-    private DeptService deptService;
+    private List<Map> list = new ArrayList<>();
     @Autowired
     private AccidentTypeDao accidentTypeDao;
     @Autowired
@@ -86,15 +88,20 @@ public class ManagerController extends BaseController {
         return "/backstage/photos";
     }
 
+
+    @RequestMapping(value = "prepareExportData")
+    @ResponseBody
+    public Result export(@RequestBody EhsJqGridParam ehsJqGridParam) {
+        list = ehsService.selectListByJqGridParam(ehsJqGridParam);
+        return  OK;
+    }
+
     @RequestMapping(value = "export")
     @ResponseBody
-    public void export(HttpServletResponse response) throws IOException {
-        //获取数据
-        List<Ehs> ehsList =  ehsDao.selectAll();
+    public void export(HttpServletResponse response,JsonArray data) throws IOException {
+
         //excel 表头
         String[] columns = new String[]{"序号","事故类型", "事故发生时间", "涉及人员","部门", "事发地点", "事故情况", "汇报人","地址"};
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("员工安全事故报告列表");
@@ -106,18 +113,18 @@ public class ManagerController extends BaseController {
         }
 
         //i-行   j-列
-        for (int i=0;i<ehsList.size();i++){
+        for (int i=0;i<list.size();i++){
             HSSFRow row = sheet.createRow(i+1);
             for (int j = 0; j < columns.length; j++) {
-                row.createCell(0).setCellValue(ehsList.get(i).getId());
-                row.createCell(1).setCellValue(accidentTypeDao.getNameById(ehsList.get(i).getAccidentType()));
-                row.createCell(2).setCellValue(sdf2.format(ehsList.get(i).getAccidentTime()));
-                row.createCell(3).setCellValue(ehsList.get(i).getAccidentMan());
-                row.createCell(4).setCellValue(ehsList.get(i).getDept());
-                row.createCell(5).setCellValue(ehsList.get(i).getAccidentPlace());
-                row.createCell(6).setCellValue(ehsList.get(i).getAccidentSituation());
-                row.createCell(7).setCellValue(ehsList.get(i).getReportMan());
-                row.createCell(8).setCellValue(ehsList.get(i).getAddress());
+                row.createCell(0).setCellValue(list.get(i).get("id").toString());
+                row.createCell(1).setCellValue(accidentTypeDao.getNameById(Integer.parseInt(list.get(i).get("accident_type").toString())));
+                row.createCell(2).setCellValue(sdf2.format(list.get(i).get("accident_time")));
+                row.createCell(3).setCellValue(list.get(i).get("accident_man").toString());
+                row.createCell(4).setCellValue(list.get(i).get("dept").toString());
+                row.createCell(5).setCellValue(list.get(i).get("accident_place").toString());
+                row.createCell(6).setCellValue(list.get(i).get("accident_situation").toString());
+                row.createCell(7).setCellValue(list.get(i).get("report_man").toString());
+                row.createCell(8).setCellValue(list.get(i).get("address").toString());
 
             }
         }
@@ -129,9 +136,10 @@ public class ManagerController extends BaseController {
         response.setHeader("Content-disposition", "attachment; filename=EHS.xls");
         response.setContentType("application/msexcel");
         wb.write(output);
+        list.clear();
         output.close();
-
     }
+
     @RequestMapping(value = "changeStatus")
     @ResponseBody
     public Result changeStatus(@RequestParam Integer id,@RequestParam Integer status) {

@@ -98,6 +98,8 @@ ActionWithoutEhsId.search = function () {
     searchParam.address = $("#address").val();
     searchParam.startDate = $("#startDate").val();
     searchParam.endDate = $("#endDate").val();
+    searchParam.status1 = $("#status1").val();
+    searchParam.status2 = $("#status2").val();
     ActionWithoutEhsId.table.reload(searchParam);
 };
 
@@ -113,6 +115,8 @@ ActionWithoutEhsId.resetSearch = function () {
     $("#responsibleDept").append("<option value=''>---请选择---</option>");
     $("#startDate").val("");
     $("#endDate").val("");
+    $("#status1").val("");
+    $("#status2").val("");
     ActionWithoutEhsId.search();
 };
 /**
@@ -131,7 +135,25 @@ ActionWithoutEhsId.enclosure = function (id) {
  * 导出
  */
 ActionWithoutEhsId.export = function () {
-    window.location.href = "/actionWithoutEhsId/export";
+    $.ajax({
+        type : 'POST',
+        url: '/actionWithoutEhsId/prepareExportData',
+        contentType : "application/json" ,
+        data: JSON.stringify({
+            responsibleMan : $("#responsibleMan").val(),
+            responsibleDept : $("#responsibleDept").val(),
+            responsibleDirector : $("#responsibleDirector").val(),
+            address : $("#address").val(),
+            startDate : $("#startDate").val(),
+            endDate : $("#endDate").val(),
+            status1 : $("#status1").val(),
+            status2 : $("#status2").val()
+        }),
+        success : function() {
+            window.open("/actionWithoutEhsId/export");
+        }
+
+    });
 }
 
 

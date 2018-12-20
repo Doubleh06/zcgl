@@ -97,6 +97,8 @@ Action.search = function () {
     searchParam.address = $("#address").val();
     searchParam.startDate = $("#startDate").val();
     searchParam.endDate = $("#endDate").val();
+    searchParam.status1 = $("#status1").val();
+    searchParam.status2 = $("#status2").val();
     Action.table.reload(searchParam);
 };
 
@@ -113,6 +115,8 @@ Action.resetSearch = function () {
     $("#responsibleDept").append("<option value=''>---请选择---</option>");
     $("#startDate").val("");
     $("#endDate").val("");
+    $("#status1").val("");
+    $("#status2").val("");
     Action.search();
 };
 
@@ -126,20 +130,26 @@ Action.enclosure = function (id,ehsId) {
  * 导出
  */
 Action.export = function (ehsId) {
-    window.location.href = "/action/export?ehsId="+ehsId;
+    $.ajax({
+        type : 'POST',
+        url: '/action/prepareExportData',
+        contentType : "application/json" ,
+        data: JSON.stringify({
+            ehsId : ehsId,
+            responsibleMan : $("#responsibleMan").val(),
+            responsibleDept : $("#responsibleDept").val(),
+            responsibleDirector : $("#responsibleDirector").val(),
+            address : $("#address").val(),
+            startDate : $("#startDate").val(),
+            endDate : $("#endDate").val(),
+            status1 : $("#status1").val(),
+            status2 : $("#status2").val()
+        }),
+        success : function() {
+            window.open("/action/export");
+        }
 
-    // $("#exportModal").modal();
-    // $.ajax({
-    //     type : 'POST',
-    //     url: '/Action/export',
-    //     contentType : "application/json" ,
-    //     // data : JSON.stringify({
-    //     //     "keys" : keys
-    //     // }),
-    //     success : function(data) {
-    //          window.open("/leads/download?key="+data.obj);
-    //     }
-    // });
+    });
 }
 
 

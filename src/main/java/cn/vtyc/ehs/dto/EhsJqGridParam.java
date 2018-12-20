@@ -17,5 +17,4 @@ public class EhsJqGridParam extends JqGridParam {
     private Integer accidentType;
     private String startDate;
     private String endDate;
-
 }

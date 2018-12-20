@@ -10,6 +10,7 @@ import cn.vtyc.ehs.dao.PersonInfoDao;
 import cn.vtyc.ehs.dto.ActionDto;
 import cn.vtyc.ehs.dto.ActionJqGridParam;
 import cn.vtyc.ehs.dto.ActionWithoutEhsIdJqGridParam;
+import cn.vtyc.ehs.dto.EhsJqGridParam;
 import cn.vtyc.ehs.entity.Action;
 import cn.vtyc.ehs.entity.Ehs;
 import cn.vtyc.ehs.entity.Image2;
@@ -42,7 +43,7 @@ import java.util.*;
 @Controller
 @RequestMapping(value = "/actionWithoutEhsId")
 public class ActionWithoutEhsIdController extends BaseController {
-
+    private List<Action> list = new ArrayList<>();
     @Autowired
     private DeptService deptService;
     @Autowired
@@ -293,19 +294,21 @@ public class ActionWithoutEhsIdController extends BaseController {
         }
     }
 
+    @RequestMapping(value = "prepareExportData")
+    @ResponseBody
+    public Result export(@RequestBody ActionWithoutEhsIdJqGridParam param) {
+        list = actionWithoutEhsIdService.selectListByJqGridParam(param);
+        return  OK;
+    }
 
     @RequestMapping(value = "export")
     @ResponseBody
     public void export(HttpServletResponse response) throws IOException {
-
-        //获取数据
-        List<Action> actionList = actionDao.selectAll();
         //excel 表头
         String[] columns = new String[]{"ehsId", "行动描述", "责任人", "责任部门", "责任主管", "要求关闭时间", "实际关闭时间","关闭理由"};
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         HSSFWorkbook wb = new HSSFWorkbook();
-        HSSFSheet sheet = wb.createSheet("Action: 报告列表");
-
+        HSSFSheet sheet = wb.createSheet("Action报告列表");
         //创建表头
         HSSFRow header = sheet.createRow(0);
         for (int i = 0; i < columns.length; i++) {
@@ -313,19 +316,24 @@ public class ActionWithoutEhsIdController extends BaseController {
         }
 
         //i-行   j-列
-        for (int i = 0; i < actionList.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             HSSFRow row = sheet.createRow(i + 1);
             for (int j = 0; j < columns.length; j++) {
-                row.createCell(0).setCellValue(actionList.get(i).getEhsId());
-                row.createCell(1).setCellValue(actionList.get(i).getDescriptive());
-                row.createCell(2).setCellValue(actionList.get(i).getResponsibleMan());
-                row.createCell(3).setCellValue(actionList.get(i).getResponsibleDept());
-                row.createCell(4).setCellValue(actionList.get(i).getResponsibleDirector());
-                row.createCell(5).setCellValue(sdf2.format(actionList.get(i).getCloseTime()));
-                row.createCell(6).setCellValue(sdf2.format(actionList.get(i).getCloseReason()));
+                if(null==list.get(i).getEhsId()){
+                    row.createCell(0).setCellValue("");
+                }else{
+                    row.createCell(0).setCellValue(list.get(i).getEhsId());
+                }
+
+                row.createCell(1).setCellValue(list.get(i).getDescriptive());
+                row.createCell(2).setCellValue(list.get(i).getResponsibleMan());
+                row.createCell(3).setCellValue(list.get(i).getResponsibleDept());
+                row.createCell(4).setCellValue(list.get(i).getResponsibleDirector());
+                row.createCell(5).setCellValue(sdf2.format(list.get(i).getCloseTime()));
+                row.createCell(6).setCellValue(list.get(i).getCloseReason());
                 String realCloseTime = "";
-                if (null != actionList.get(i).getRealCloseTime()) {
-                    realCloseTime = sdf2.format(actionList.get(i).getRealCloseTime());
+                if (null != list.get(i).getRealCloseTime()) {
+                    realCloseTime = sdf2.format(list.get(i).getRealCloseTime());
                 }
                 row.createCell(6).setCellValue(realCloseTime);
 
@@ -338,6 +346,7 @@ public class ActionWithoutEhsIdController extends BaseController {
         response.setHeader("Content-disposition", "attachment; filename=Action.xls");
         response.setContentType("application/msexcel");
         wb.write(output);
+        list.clear();
         output.close();
 
     }

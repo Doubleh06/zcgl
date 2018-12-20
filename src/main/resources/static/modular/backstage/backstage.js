@@ -107,20 +107,22 @@ Backstage.resetSearch = function () {
  * 导出
  */
 Backstage.export = function () {
-    window.location.href = "/backstage/export";
+    $.ajax({
+        type : 'POST',
+        url: '/backstage/prepareExportData',
+        contentType : "application/json" ,
+        data: JSON.stringify({
+            accidentMan:$("#accidentMan").val(),
+            dept:$("#dept").val(),
+            address:$("#address").val(),
+            startDate:$("#startDate").val(),
+            endDate:$("#endDate").val()
+        }),
+        success : function() {
+            window.open("/backstage/export");
+        }
+    });
 
-    // $("#exportModal").modal();
-    // $.ajax({
-    //     type : 'POST',
-    //     url: '/Backstage/export',
-    //     contentType : "application/json" ,
-    //     // data : JSON.stringify({
-    //     //     "keys" : keys
-    //     // }),
-    //     success : function(data) {
-    //          window.open("/leads/download?key="+data.obj);
-    //     }
-    // });
 }
 
 
