@@ -28,4 +28,6 @@ public class EmailDto {
     @NotNull(message = "smtpTimeout不能为空")
     private Integer smtpTimeout;
     private String address;
+    @NotEmpty(message = "ehsEmail不能为空")
+    private String ehsEmail;
 }

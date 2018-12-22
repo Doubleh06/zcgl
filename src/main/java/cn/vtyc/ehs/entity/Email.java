@@ -17,5 +17,6 @@ public class Email extends BaseEntity {
     private Integer smtpTimeout;
     private Integer isUsing;
     private String address;
+    private String ehsEmail;
 
 }

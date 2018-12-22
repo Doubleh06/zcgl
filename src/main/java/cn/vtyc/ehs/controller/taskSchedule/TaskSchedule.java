@@ -27,7 +27,6 @@ public class TaskSchedule {
     @Scheduled(cron = "0 0 7 * * ?")
     public void sendMail()throws Exception{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String ehsEmail = environment.getProperty("mail.ehs");
 
         StringBuffer sb = new StringBuffer();
         sb.append("where 1=1 ");
@@ -39,16 +38,15 @@ public class TaskSchedule {
             String content = "行动描述："+action.getDescriptive();
             content += "<br>";
             content += "关闭时间："+sdf.format(action.getCloseTime());
-            //TODO  ehs 邮件维护
             switch (isNeedSendMail(action.getCloseTime())){
                 case "W":
                     String[] emailArr = new String[1];
-                    emailArr[0] = ehsEmail;
+                    emailArr[0] = email.getEhsEmail();
                     MailUtil.sendEmail(email,"EHS", action.getEmail().split("\\|"), emailArr, content, null);
                     break;
                 case "P":
                     String[] emailArr2 = new String[2];
-                    emailArr2[0] = ehsEmail;
+                    emailArr2[0] = email.getEhsEmail();
                     emailArr2[1] = action.getDirectorEmail();
                     MailUtil.sendEmail(email,"EHS", action.getEmail().split("\\|"), emailArr2, content, null);
                     break;

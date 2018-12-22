@@ -12,7 +12,7 @@ Email.initOptions = function () {
     var options = {
         url : "/maintenance/email/grid",
         autowidth:true,
-        colNames: ['id','smtpAuth','transportProrocol','sendCharset','smtpPort','isSsl','host','authName','authPassword','smtpTimeout','地址','isUsing','操作'],
+        colNames: ['id','smtpAuth','transportProrocol','sendCharset','smtpPort','isSsl','host','authName','authPassword','smtpTimeout','地址','ehs邮箱','isUsing','操作'],
         colModel: [
             {name: 'id', index: 'id', width: 20},
             {name: 'smtpAuth', index: 'smtpAuth', width: 150},
@@ -35,6 +35,7 @@ Email.initOptions = function () {
                     }
 
                 }},
+            {name: 'ehsEmail', index: 'ehsEmail', width: 150},
             {name: 'isUsing', index: 'isUsing', width: 150, sortable: false, formatter: function (cellValue, options, rowObject) {
                     var id = "'"+rowObject["id"]+"'";
                     var address = "'"+rowObject["address"]+"'";
@@ -133,6 +134,7 @@ Email.modify = function (id) {
                 form.find("input[name='authName']").val(email.authName);
                 form.find("input[name='authPassword']").val(email.authPassword);
                 form.find("input[name='smtpTimeout']").val(email.smtpTimeout);
+                form.find("input[name='ehsEmail']").val(email.ehsEmail);
                 form.find("select[name='address']").val(email.address);
                 $("#modifyModal").modal();
             }
