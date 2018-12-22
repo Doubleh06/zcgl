@@ -11,15 +11,14 @@ import cn.vtyc.ehs.dto.ActionDto;
 import cn.vtyc.ehs.dto.ActionJqGridParam;
 import cn.vtyc.ehs.dto.ActionWithoutEhsIdJqGridParam;
 import cn.vtyc.ehs.dto.EhsJqGridParam;
-import cn.vtyc.ehs.entity.Action;
-import cn.vtyc.ehs.entity.Ehs;
-import cn.vtyc.ehs.entity.Image2;
-import cn.vtyc.ehs.entity.PersonInfo;
+import cn.vtyc.ehs.entity.*;
 import cn.vtyc.ehs.service.ActionService;
 import cn.vtyc.ehs.service.ActionWithoutEhsIdService;
 import cn.vtyc.ehs.service.DeptService;
+import cn.vtyc.ehs.service.EmailService;
 import cn.vtyc.ehs.util.MailUtil;
 import cn.vtyc.ehs.util.MyFileUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -58,19 +57,16 @@ public class ActionWithoutEhsIdController extends BaseController {
     private Environment environment;
     @Autowired
     private PersonInfoDao personInfoDao;
+    @Autowired
+    private EmailService emailService;
 
 
     /**************************************************查看Action*********************************************************/
     @RequestMapping(value = "/seeAction")
     public String list(Model model) {
         model.addAttribute("menus", getMenus("actionWithoutEhsId"));
-//        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-//        Calendar c = Calendar.getInstance();
-//        Date date = new Date();
-//        c.setTime(date);
-//        c.add(Calendar.MONTH,-1);
-//        model.addAttribute("startDate", sdf.format(c.getTime()));
-//        model.addAttribute("endDate", sdf.format(date));
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        model.addAttribute("today",sdf.format(new Date()));
         return "/actionWithoutEhsId/seeAction";
     }
 
@@ -107,12 +103,19 @@ public class ActionWithoutEhsIdController extends BaseController {
 
     @RequestMapping(value = "/close")
     @ResponseBody
-    public Result close(@RequestParam Integer id,@RequestParam String closeReason) {
+    public Result close(@RequestBody JSONObject jsonObject) {
+        Integer closeId = jsonObject.getInteger("closeId");
+        String closeReason = jsonObject.getString("closeReason");
+        String closeDate = jsonObject.getString("closeDate");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Action action = new Action();
-        action.setId(id);
+        action.setId(closeId);
         action.setCloseReason(closeReason);
-        action.setCloseTime(new Date());
+        try {
+            action.setRealCloseTime(sdf.parse(closeDate+" 00:00:00"));
+        }catch (Exception e){}
         actionDao.updateByPrimaryKeySelective(action);
+
         return OK;
     }
 
@@ -149,6 +152,8 @@ public class ActionWithoutEhsIdController extends BaseController {
             action.setImgUrl(imgUrl.substring(0, imgUrl.length() - 1));
         }
         actionDao.insert(action);
+
+        Email email = emailService.getChosenEmailByAddress(action.getAddress());
         //发送邮件
         //内容拼接
         String content = "行动描述："+action.getDescriptive();
@@ -164,9 +169,9 @@ public class ActionWithoutEhsIdController extends BaseController {
                 map.put("file",filePath+name);
                 list.add(map);
             }
-            MailUtil.sendEmail("EHS", action.getEmail().split("\\|"), null, content, list);
+            MailUtil.sendEmail(email,"EHS", action.getEmail().split("\\|"), null, content, list);
         }else{
-            MailUtil.sendEmail("EHS", action.getEmail().split("\\|"), null, content, null);
+            MailUtil.sendEmail(email,"EHS", action.getEmail().split("\\|"), null, content, null);
         }
         return OK;
     }

@@ -1,5 +1,6 @@
 package cn.vtyc.ehs.util;
 
+import cn.vtyc.ehs.entity.Email;
 import com.sun.mail.util.MailSSLSocketFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -17,33 +18,32 @@ import java.util.Properties;
 
 @Component
 public class MailUtil {
-    @Autowired
-    private Environment env;
 
-    private static String auth;
-    private static String host;
-    private static String protocol;
-    private static int port;
-    private static String authName;
-    private static String password;
-    private static boolean isSSL;
-    private static String charset ;
-    private static String timeout;
+
+//    private static String auth;
+//    private static String host;
+//    private static String protocol;
+//    private static int port;
+//    private static String authName;
+//    private static String password;
+//    private static boolean isSSL;
+//    private static String charset ;
+//    private static String timeout;
     private static boolean flag = true;
 
-    @PostConstruct
-    public void initParam () {
-        auth = env.getProperty("mail.smtp.auth");
-        host = env.getProperty("mail.host");
-        protocol = env.getProperty("mail.transport.protocol");
-        port = env.getProperty("mail.smtp.port", Integer.class);
-        authName = env.getProperty("mail.auth.name");
-        password = env.getProperty("mail.auth.password");
-        charset = env.getProperty("mail.send.charset");
-        isSSL = env.getProperty("mail.is.ssl", Boolean.class);
-        timeout = env.getProperty("mail.smtp.timeout");
-
-    }
+//    @PostConstruct
+//    public void initParam () {
+//        auth = env.getProperty("mail.smtp.auth");
+//        host = env.getProperty("mail.host");
+//        protocol = env.getProperty("mail.transport.protocol");
+//        port = env.getProperty("mail.smtp.port", Integer.class);
+//        authName = env.getProperty("mail.auth.name");
+//        password = env.getProperty("mail.auth.password");
+//        charset = env.getProperty("mail.send.charset");
+//        isSSL = env.getProperty("mail.is.ssl", Boolean.class);
+//        timeout = env.getProperty("mail.smtp.timeout");
+//
+//    }
 
     /**
      * 发送邮件
@@ -53,7 +53,17 @@ public class MailUtil {
      * @param content 邮件内容
      * @param attachfiles 附件列表  List<Map<String, String>> key: name && file
      */
-    public static boolean sendEmail(String subject, String[] toUsers, String[] ccUsers, String content, List<Map<String, String>> attachfiles) {
+    public static boolean sendEmail(Email email,String subject, String[] toUsers, String[] ccUsers, String content, List<Map<String, String>> attachfiles) {
+        String auth = email.getSmtpAuth();
+        String  host = email.getHost();
+        String protocol = email.getTransportProrocol();
+        String port = email.getSmtpPort();
+        String authName = email.getAuthName();
+        String password = email.getAuthPassword();
+        String charset = email.getSendCharset();
+        boolean isSSL = Boolean.parseBoolean(email.getIsSsl());
+        Integer timeout = email.getSmtpTimeout();
+
         try {
             JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
             javaMailSender.setHost(host);
@@ -61,11 +71,11 @@ public class MailUtil {
             javaMailSender.setPassword(password);
             javaMailSender.setDefaultEncoding(charset);
             javaMailSender.setProtocol(protocol);
-            javaMailSender.setPort(port);
+            javaMailSender.setPort(Integer.parseInt(port));
 
             Properties properties = new Properties();
             properties.setProperty("mail.smtp.auth", auth);
-            properties.setProperty("mail.smtp.timeout", timeout);
+            properties.setProperty("mail.smtp.timeout", timeout.toString());
             if(isSSL){
                 MailSSLSocketFactory sf = null;
                 try {

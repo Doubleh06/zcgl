@@ -9,6 +9,7 @@ import cn.vtyc.ehs.entity.*;
 import cn.vtyc.ehs.service.ActionService;
 import cn.vtyc.ehs.service.DeptService;
 import cn.vtyc.ehs.service.EhsService;
+import cn.vtyc.ehs.service.EmailService;
 import cn.vtyc.ehs.util.MailUtil;
 import cn.vtyc.ehs.util.MyFileUtil;
 import com.alibaba.fastjson.JSONObject;
@@ -53,6 +54,8 @@ public class ActionController extends BaseController {
     private Environment environment;
     @Autowired
     private PersonInfoDao personInfoDao;
+    @Autowired
+    private EmailService emailService;
 
 
     /**************************************************查看Action*********************************************************/
@@ -60,6 +63,8 @@ public class ActionController extends BaseController {
     public String list(Model model, @RequestParam Integer id) {
         model.addAttribute("menus", getMenus("backstage"));
         model.addAttribute("ehsId", id);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        model.addAttribute("today",sdf.format(new Date()));
         return "/action/seeAction";
     }
 
@@ -96,11 +101,17 @@ public class ActionController extends BaseController {
 
     @RequestMapping(value = "/close")
     @ResponseBody
-    public Result close(@RequestParam Integer id,@RequestParam String closeReason) {
+    public Result close(@RequestBody JSONObject jsonObject) {
+        Integer closeId = jsonObject.getInteger("closeId");
+        String closeReason = jsonObject.getString("closeReason");
+        String closeDate = jsonObject.getString("closeDate");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Action action = new Action();
-        action.setId(id);
+        action.setId(closeId);
         action.setCloseReason(closeReason);
-        action.setCloseTime(new Date());
+        try {
+            action.setRealCloseTime(sdf.parse(closeDate+" 00:00:00"));
+        }catch (Exception e){}
         actionDao.updateByPrimaryKeySelective(action);
         return OK;
     }
@@ -139,6 +150,8 @@ public class ActionController extends BaseController {
             action.setImgUrl(imgUrl.substring(0, imgUrl.length() - 1));
         }
         actionDao.insert(action);
+
+        Email email = emailService.getChosenEmailByAddress(action.getAddress());
         //发送邮件
         //内容拼接
         String content = "行动描述："+action.getDescriptive();
@@ -154,9 +167,9 @@ public class ActionController extends BaseController {
                 map.put("file",filePath+name);
                 list.add(map);
             }
-            MailUtil.sendEmail("EHS", action.getEmail().split("\\|"), null, content, list);
+            MailUtil.sendEmail(email,"EHS", action.getEmail().split("\\|"), null, content, list);
         }else{
-            MailUtil.sendEmail("EHS", action.getEmail().split("\\|"), null, content, null);
+            MailUtil.sendEmail(email,"EHS", action.getEmail().split("\\|"), null, content, null);
         }
         return OK;
     }

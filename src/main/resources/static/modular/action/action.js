@@ -56,7 +56,7 @@ Action.initOptions = function () {
                     str += '<input type="button" class=" btn btn-sm btn-success"  value="查看附件" onclick="Action.enclosure(' + id+","+ehsId + ')"/>&nbsp;';
                 }
                 if (""==realCloseTime||null==realCloseTime){
-                    str += '<input type="button" class=" btn btn-sm btn-warning"  value="关闭" onclick="Action.close(' + id + ')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-warning"  value="关闭" onclick="Action.closeShow(' + id + ')"/>&nbsp;';
                 }
 
 
@@ -173,19 +173,50 @@ Action.delete = function (id) {
  *
  * @param id    userId
  */
-Action.close = function (id) {
-    input("确定关闭吗？", "请输入关闭理由", function (inputValue) {
-        if (inputValue === false) return false;
-        if (inputValue === "") {
-            swal.showInputError("内容不能为空，请输入关闭理由！");
-            return false
-        }
-        $.get("/action/close?id=" + id+"&closeReason="+inputValue, function(){
-            success("关闭成功");
-            Action.search();
-        });
-    })
+Action.closeShow = function (id) {
+    console.log(id)
+    $("#closeId").val(id);
+    $("#closeModal").modal();
+    // input("确定关闭吗？", "请输入关闭理由", function (inputValue) {
+    //     if (inputValue === false) return false;
+    //     if (inputValue === "") {
+    //         swal.showInputError("内容不能为空，请输入关闭理由！");
+    //         return false
+    //     }
+    //     $.get("/action/close?id=" + id+"&closeReason="+inputValue, function(){
+    //         success("关闭成功");
+    //         Action.search();
+    //     });
+    // })
 };
+Action.close = function () {
+    var form = $("#close-form");
+    var action = {};
+    action.closeId = form.find("input[name='closeId']").val()
+    action.closeReason =  form.find("input[name='closeReason']").val();
+    action.closeDate =  form.find("input[name='closeDate']").val();
+    if(""==action.closeReason||null==action.closeReason){
+        error("关闭理由不能为空")
+        return ;
+    }
+
+    $.ajax({
+        url: "/action/close",
+        type: 'post',
+        data: JSON.stringify(action),
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        success: function (r) {
+            if (r.code === 0) {
+                $("#closeModal").modal("hide");
+                form.find("input[name='closeReason']").val("");
+                Action.search();
+            }
+        }
+    })
+}
+
+
 
 Action.insert = function (btn) {
     var email = $("#email").val();

@@ -115,6 +115,41 @@
 
 
 <#--分配角色弹框-->
+<#--弹框-->
+<div class="modal fade" id="closeModal" tabindex="-1"  role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="modalTitle">关闭Action</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="close-form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">关闭理由</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="closeReason">
+                            <input type="hidden" class="form-control" name="closeId" id="closeId">
+                        </div>
+                    </div>
+                    <div class="form-group" id="data_1">
+                        <label class="col-sm-2 font-label">关闭时间</label>
+                        <div class="col-sm-10 input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="${today}" name="closeDate">
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-primary" onclick="Action.close()">确定</button>
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
 
 <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
 <script src="/static/js/plugins/chosen/chosen.jquery.js"></script>
@@ -148,6 +183,13 @@
         $('#dataRange .input-daterange').datepicker({
             keyboardNavigation: false,
             forceParse: false,
+            autoclose: true
+        });
+        $('#data_1 .input-group.date').datepicker({
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
             autoclose: true
         });
     });
