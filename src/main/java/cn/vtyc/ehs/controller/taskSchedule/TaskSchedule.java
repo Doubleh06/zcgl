@@ -2,6 +2,8 @@ package cn.vtyc.ehs.controller.taskSchedule;
 
 import cn.vtyc.ehs.dao.ActionDao;
 import cn.vtyc.ehs.entity.Action;
+import cn.vtyc.ehs.entity.Email;
+import cn.vtyc.ehs.service.EmailService;
 import cn.vtyc.ehs.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -19,6 +21,8 @@ public class TaskSchedule {
     private ActionDao actionDao;
     @Autowired
     private Environment environment;
+    @Autowired
+    private EmailService emailService;
 //    @Scheduled(cron="0/3 * *  * * ? ")
     @Scheduled(cron = "0 0 7 * * ?")
     public void sendMail()throws Exception{
@@ -29,21 +33,24 @@ public class TaskSchedule {
         sb.append("where 1=1 ");
         sb.append("and real_close_time is null");
         List<Action> actionList = actionDao.selectActionList(sb.toString());
+
         for (Action action : actionList){
+            Email email = emailService.getChosenEmailByAddress(action.getAddress());
             String content = "行动描述："+action.getDescriptive();
             content += "<br>";
             content += "关闭时间："+sdf.format(action.getCloseTime());
+            //TODO  ehs 邮件维护
             switch (isNeedSendMail(action.getCloseTime())){
                 case "W":
                     String[] emailArr = new String[1];
                     emailArr[0] = ehsEmail;
-                    MailUtil.sendEmail("EHS", action.getEmail().split("\\|"), emailArr, content, null);
+                    MailUtil.sendEmail(email,"EHS", action.getEmail().split("\\|"), emailArr, content, null);
                     break;
                 case "P":
                     String[] emailArr2 = new String[2];
                     emailArr2[0] = ehsEmail;
                     emailArr2[1] = action.getDirectorEmail();
-                    MailUtil.sendEmail("EHS", action.getEmail().split("\\|"), emailArr2, content, null);
+                    MailUtil.sendEmail(email,"EHS", action.getEmail().split("\\|"), emailArr2, content, null);
                     break;
                 case "N":
                     break;

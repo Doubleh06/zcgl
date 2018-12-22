@@ -12,5 +12,6 @@ import lombok.Data;
 public class EmailJqGridParam extends JqGridParam {
 
     private String authName;
+    private String address;
 
 }

@@ -36,14 +36,26 @@ Email.initOptions = function () {
 
                 }},
             {name: 'isUsing', index: 'isUsing', width: 150, sortable: false, formatter: function (cellValue, options, rowObject) {
-                    if (cellValue == '0') {
-                        return "启用";
-                    }else if(cellValue == '1'){
-                        return "未启用"
+                    var id = "'"+rowObject["id"]+"'";
+                    var address = "'"+rowObject["address"]+"'";
+                    var isUsing = rowObject["isUsing"];
+                    var str = "";
+                    if(0==isUsing){
+                        str += '<div class="onoffswitch"><input type="checkbox" checked class="onoffswitch-checkbox" id="'+id+'" onclick="Email.clickSwitch('+id+','+isUsing+','+address+')" ><label class="onoffswitch-label" for="'+id+'"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></div>'
                     }else{
-                        return "";
-                    }return str;
+                        str += '<div class="onoffswitch"><input type="checkbox" class="onoffswitch-checkbox" id="'+id+'" onclick="Email.clickSwitch('+id+','+isUsing+','+address+')"><label class="onoffswitch-label" for="'+id+'"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></div>'
+                    }
+                    return str;
                 }},
+            // {name: 'isUsing', index: 'isUsing', width: 150, sortable: false, formatter: function (cellValue, options, rowObject) {
+            //         if (cellValue == '0') {
+            //             return "启用";
+            //         }else if(cellValue == '1'){
+            //             return "未启用"
+            //         }else{
+            //             return "";
+            //         }return str;
+            //     }},
             {name: 'operations', index: 'operations', width: 150, sortable: false, formatter: function (cellValue, options, rowObject) {
                 var id = "'"+rowObject["id"]+"'";
                 var str = "";
@@ -63,7 +75,7 @@ Email.initOptions = function () {
 Email.search = function () {
     var searchParam = {};
     searchParam.name = $("#name").val();
-    console.log(searchParam);
+    searchParam.address = $("#address").val();
     Email.table.reload(searchParam);
 };
 
@@ -193,6 +205,32 @@ Email.changeEmail = function () {
     })
 }
 
+
+Email.clickSwitch = function (id,isUsing,address) {
+    $.ajax({
+        url: "/maintenance/email/clickSwitch",
+        type: 'POST',
+        data:JSON.stringify({
+            id:id,
+            isUsing:isUsing,
+            address:address
+        }),
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        success: function (r) {
+            if (r.code === 0) {
+                if(r.obj){
+                    success("切换成功");
+                    Email.search();
+                }else {
+                    error("切换失败，一个地区不能同时打开多个发件邮箱")
+                    Email.search();
+                }
+
+            }
+        }
+    })
+}
 
 
 /**

@@ -44,13 +44,22 @@
                                         <input type="text" class="form-control" id="name" style="width: 150px;">
                                     </div>
                                     &nbsp&nbsp&nbsp
+                                    <div class="form-group">
+                                        <label>地址</label>
+                                        <select class="form-control" id="address">
+                                            <option value="" >---请选择---</option>
+                                            <option value="CZ" >常州</option>
+                                            <option value="CQ">重庆</option>
+                                        </select>
+                                    </div>
+                                    &nbsp&nbsp&nbsp
 
                                     <button class="btn btn-success"  id="search" type="button" onclick="Email.search()">搜索</button>&nbsp
                                     <button class="btn btn-success" type="button" onclick="Email.resetSearch()">重置</button>&nbsp
                                     <button class="btn btn-primary" type="button" onclick="Email.create()">新增</button>
                                     &nbsp&nbsp&nbsp
-                                    <button class="btn btn-primary" type="button" onclick="Email.chooseEmail('CZ')">选择常州发件邮箱</button>
-                                    <button class="btn btn-primary" type="button" onclick="Email.chooseEmail('CQ')">选择重庆发件邮箱</button>
+                                    <#--<button class="btn btn-primary" type="button" onclick="Email.chooseEmail('CZ')">选择常州发件邮箱</button>-->
+                                    <#--<button class="btn btn-primary" type="button" onclick="Email.chooseEmail('CQ')">选择重庆发件邮箱</button>-->
 
                                 </div>
                             </div>

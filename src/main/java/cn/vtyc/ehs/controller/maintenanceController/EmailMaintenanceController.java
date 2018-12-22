@@ -97,4 +97,14 @@ public class EmailMaintenanceController extends BaseController {
         emailService.changeEmailByAuthName(address,authName);
         return OK;
     }
+    @RequestMapping("/clickSwitch")
+    @ResponseBody
+    public Result clickSwitch(@RequestBody JSONObject jsonObject) {
+        Integer id = jsonObject.getInteger("id");
+        String address = jsonObject.getString("address");
+        Integer isUsing = jsonObject.getInteger("isUsing");
+        boolean flag = emailService.clickSwitch(id,address,isUsing);
+        return new JSONResult(flag);
+    }
+
 }

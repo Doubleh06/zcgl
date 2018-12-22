@@ -24,7 +24,15 @@ public interface EmailDao extends BaseDao<Email> {
     @Update("update email set is_using = 1 where address = '${address}'")
     void changeAllUsingStatus(@Param("address")String address);
 
-    @Select("select * from email where address = ${address} and is_using = 0")
+    @Select("select * from email where address = '${address}' and is_using = 0")
     Email getChosenEmailByAddress(@Param("address") String address);
 
+    @Update("update email set is_using = 1 where id = '${id}'")
+    void closeInUsing(@Param("id")Integer id);
+
+    @Update("update email set is_using = 0 where id = '${id}'")
+    void openInUsing(@Param("id")Integer id);
+
+    @Select("select is_using from email where address = '${address}'")
+    List<Integer> checkIsUsing(@Param("address") String address);
 }

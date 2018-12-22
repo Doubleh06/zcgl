@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.Inet4Address;
 import java.util.List;
 
 @Service
@@ -49,6 +50,9 @@ public class EmailService extends AbstractService<Email> {
         if(StringUtils.isNotEmpty(param.getAuthName())) {
             sql.append(" and  auth_name like '%").append(param.getAuthName()).append("%'");
         }
+        if(StringUtils.isNotEmpty(param.getAddress())) {
+            sql.append(" and  address = '").append(param.getAddress()).append("'");
+        }
         return new PageInfo<>(emailDao.selectEmailList(sql.toString()));
     }
 
@@ -72,5 +76,21 @@ public class EmailService extends AbstractService<Email> {
 
     public Email getChosenEmailByAddress(String address){
         return emailDao.getChosenEmailByAddress(address);
+    }
+
+    public boolean clickSwitch(Integer id,String address,Integer isUsing){
+        if (0==isUsing){
+            //如果 启用-->关闭
+            emailDao.closeInUsing(id);
+        }else{
+            //如果 关闭-->启动    先查看相同的地址是否有开启的  有报错，没有关闭
+            List<Integer> list = emailDao.checkIsUsing(address);
+            if(list.contains(0)){
+                return false;
+            }else {
+                emailDao.openInUsing(id);
+            }
+        }
+        return true;
     }
 }
