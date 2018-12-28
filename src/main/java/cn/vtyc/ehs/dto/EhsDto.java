@@ -16,5 +16,6 @@ public class EhsDto {
     private String reportMan;
     private String uuid;
     private String address;
+    private String workNum;
 
 }

@@ -4,11 +4,9 @@ package cn.vtyc.ehs.service;
 import cn.vtyc.ehs.core.AbstractService;
 import cn.vtyc.ehs.core.BaseDao;
 import cn.vtyc.ehs.core.jqGrid.JqGridParam;
-import cn.vtyc.ehs.dao.AccidentTypeDao;
-import cn.vtyc.ehs.dao.ActionDao;
-import cn.vtyc.ehs.dao.DeptmentDao;
-import cn.vtyc.ehs.dao.EhsDao;
+import cn.vtyc.ehs.dao.*;
 import cn.vtyc.ehs.dto.EhsJqGridParam;
+import cn.vtyc.ehs.entity.AccidentLevel;
 import cn.vtyc.ehs.entity.AccidentType;
 import cn.vtyc.ehs.entity.Deptment;
 import cn.vtyc.ehs.entity.Ehs;
@@ -32,7 +30,7 @@ public class EhsService extends AbstractService<Ehs> {
     @Autowired
     private AccidentTypeDao accidentTypeDao;
     @Autowired
-    private DeptmentDao deptmentDao;
+    private AccidentLevelDao accidentLevelDao;
     @Autowired
     private ActionDao actionDao;
 
@@ -84,6 +82,7 @@ public class EhsService extends AbstractService<Ehs> {
 
         //获取事故种类信息
         List<AccidentType> accidentTypeList = accidentTypeDao.selectAll();
+        List<AccidentLevel> accidentLevelList = accidentLevelDao.selectAll();
         //获取ehs信息
         List<Map> ehsList = ehsDao.selectEhsList(sql.toString());
 
@@ -93,6 +92,13 @@ public class EhsService extends AbstractService<Ehs> {
             for(AccidentType accidentType : accidentTypeList){
                 if(Integer.parseInt(ehs.get("accident_type").toString())==accidentType.getId()){
                     ehs.put("accident_type_name",accidentType.getName());
+                }
+            }
+            for(AccidentLevel accidentLevel : accidentLevelList){
+                if (null!=ehs.get("accident_level")){
+                    if(Integer.parseInt(ehs.get("accident_level").toString())==accidentLevel.getId()){
+                        ehs.put("accident_level_name",accidentLevel.getName());
+                    }
                 }
             }
             ehs.put("total_action",actionDao.getTotalById(Integer.parseInt(ehs.get("id").toString())));
@@ -129,6 +135,7 @@ public class EhsService extends AbstractService<Ehs> {
 
         //获取事故种类信息
         List<AccidentType> accidentTypeList = accidentTypeDao.selectAll();
+        List<AccidentLevel> accidentLevelList = accidentLevelDao.selectAll();
         //获取ehs信息
         List<Map> ehsList = ehsDao.selectEhsList(sql.toString());
 
@@ -138,6 +145,13 @@ public class EhsService extends AbstractService<Ehs> {
             for(AccidentType accidentType : accidentTypeList){
                 if(Integer.parseInt(ehs.get("accident_type").toString())==accidentType.getId()){
                     ehs.put("accident_type_name",accidentType.getName());
+                }
+            }
+            for(AccidentLevel accidentLevel : accidentLevelList){
+                if (null!=ehs.get("accident_level")){
+                    if(Integer.parseInt(ehs.get("accident_level").toString())==accidentLevel.getId()){
+                        ehs.put("accident_level_name",accidentLevel.getName());
+                    }
                 }
             }
             ehs.put("total_action",actionDao.getTotalById(Integer.parseInt(ehs.get("id").toString())));

@@ -23,11 +23,11 @@ Sheet.insert = function () {
         error("时间不能为空");
         return;
     }
-    var accidentMan = formData.accidentMan;
-    if(null==accidentMan||""==accidentMan){
-        error("涉及人员不能为空");
-        return;
-    }
+    // var accidentMan = formData.accidentMan;
+    // if(null==accidentMan||""==accidentMan){
+    //     error("涉及人员不能为空");
+    //     return;
+    // }
     var accidentPlace = formData.accidentPlace;
     if(null==accidentPlace||""==accidentPlace){
         error("事发地点不能为空");
@@ -41,6 +41,11 @@ Sheet.insert = function () {
     var reportMan = formData.reportMan;
     if(null==reportMan||""==reportMan){
         error("汇报人不能为空");
+        return;
+    }
+    var workNum = formData.workNum;
+    if(null==workNum||""==workNum){
+        error("汇报人工号不能为空");
         return;
     }
 

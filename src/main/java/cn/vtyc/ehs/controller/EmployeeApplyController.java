@@ -51,6 +51,11 @@ public class EmployeeApplyController extends BaseController {
     private Environment environment;
 
 
+    @RequestMapping(value = "remind")
+    public String remind(Model model){
+        return "/employee/remind";
+    }
+
     @RequestMapping(value = "sheet")
     public String list(Model model){
 

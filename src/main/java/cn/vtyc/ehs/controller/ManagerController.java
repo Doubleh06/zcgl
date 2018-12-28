@@ -3,6 +3,7 @@ package cn.vtyc.ehs.controller;
 import cn.vtyc.ehs.core.JSONResult;
 import cn.vtyc.ehs.core.Result;
 import cn.vtyc.ehs.core.jqGrid.JqGridResult;
+import cn.vtyc.ehs.dao.AccidentLevelDao;
 import cn.vtyc.ehs.dao.AccidentTypeDao;
 import cn.vtyc.ehs.dao.ActionDao;
 import cn.vtyc.ehs.dao.EhsDao;
@@ -43,6 +44,8 @@ public class ManagerController extends BaseController {
     @Autowired
     private AccidentTypeDao accidentTypeDao;
     @Autowired
+    private AccidentLevelDao accidentLevelDao;
+    @Autowired
     private EhsService ehsService;
     @Autowired
     private EhsDao ehsDao;
@@ -53,6 +56,7 @@ public class ManagerController extends BaseController {
     public String list(Model model){
         model.addAttribute("menus", getMenus("backstage"));
         model.addAttribute("accidentTypes",accidentTypeDao.selectAll());
+        model.addAttribute("accidentLevels",accidentLevelDao.selectAll());
         return "/backstage/list";
     }
 
@@ -101,7 +105,7 @@ public class ManagerController extends BaseController {
     public void export(HttpServletResponse response,JsonArray data) throws IOException {
 
         //excel 表头
-        String[] columns = new String[]{"序号","事故类型", "事故发生时间", "涉及人员","部门", "事发地点", "事故情况", "汇报人","地址"};
+        String[] columns = new String[]{"序号","事故类型", "事故发生时间", "涉及人员","部门", "事发地点", "事故情况", "汇报人","地址","事故等级"};
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("员工安全事故报告列表");
@@ -125,6 +129,12 @@ public class ManagerController extends BaseController {
                 row.createCell(6).setCellValue(list.get(i).get("accident_situation").toString());
                 row.createCell(7).setCellValue(list.get(i).get("report_man").toString());
                 row.createCell(8).setCellValue(list.get(i).get("address").toString());
+                if(null==list.get(i).get("accident_level")){
+                    row.createCell(9).setCellValue("");
+                }else{
+                    row.createCell(9).setCellValue(accidentLevelDao.getNameById(Integer.parseInt(list.get(i).get("accident_level").toString())));
+                }
+
 
             }
         }
@@ -146,6 +156,20 @@ public class ManagerController extends BaseController {
         Ehs ehs = new Ehs();
         ehs.setId(id);
         ehs.setStatus(status);
+        ehs.setDealTime(new Date());
+        ehsDao.updateByPrimaryKeySelective(ehs);
+        return OK;
+    }
+
+    @RequestMapping(value = "accept")
+    @ResponseBody
+    public Result accept(@RequestBody JSONObject jsonObject) {
+        Integer id = jsonObject.getInteger("ehsId");
+        Integer accidentLevel = jsonObject.getInteger("accidentLevel");
+        Ehs ehs = new Ehs();
+        ehs.setId(id);
+        ehs.setAccidentLevel(accidentLevel);
+        ehs.setStatus(1);
         ehs.setDealTime(new Date());
         ehsDao.updateByPrimaryKeySelective(ehs);
         return OK;

@@ -20,5 +20,7 @@ public class Ehs extends BaseEntity {
     private String address;
     private Integer status;
     private Date dealTime;
+    private Integer accidentLevel;
+    private String workNum;
 
 }

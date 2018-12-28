@@ -12,11 +12,11 @@ Backstage.initOptions = function () {
     var options = {
         url : "/backstage/grid",
         autowidth:true,
-        colNames: ['编号','事故类型', '涉及人员',"人员所在部门/人员接待部门", '事发地点','事发时间','提交时间','事故情况','汇报人','状态','操作'],
+        colNames: ['编号','事故类型', '涉及人员',"人员所在部门/人员接待部门", '事发地点','事发时间','提交时间','事故情况','汇报人','事故等级','状态','操作'],
         colModel: [
             {name: 'id', index: 'id', width: 20},
             {name: 'accident_type_name', index: 'accident_type_name', width: 80},
-            {name: 'accident_man', index: 'accident_man', width: 60},
+            {name: 'accident_man', index: 'accident_man', width: 40},
             {name: 'dept', index: 'dept', width: 60},
             {name: 'accident_place', index: 'accident_place', width: 60, sortable: false},
             {name: 'accident_time', index: 'accident_time', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
@@ -34,7 +34,8 @@ Backstage.initOptions = function () {
                     return dateFtt("yyyy-MM-dd hh:mm:ss", da);
                 }},
             {name: 'accident_situation', index: 'accident_situation', width: 80, sortable: false},
-            {name: 'report_man', index: 'report_man', width: 60, sortable: false},
+            {name: 'report_man', index: 'report_man', width: 30, sortable: false},
+            {name: 'accident_level_name', index: 'accident_level_name', width: 80},
             {name: 'status', index: 'status', width: 40, sortable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == 0) {
                         return "处理中";
@@ -45,7 +46,7 @@ Backstage.initOptions = function () {
                     }
 
                 }},
-            {name: 'operations', index: 'operations', width: 150, sortable: false, formatter: function (cellValue, options, rowObject) {
+            {name: 'operations', index: 'operations', width: 200, sortable: false, formatter: function (cellValue, options, rowObject) {
                 var imgUrl = rowObject["img_url"];
                 var status = rowObject['status'];
                 var total = rowObject["total_action"];
@@ -58,7 +59,7 @@ Backstage.initOptions = function () {
                     str += '<input type="button" class="control-auth btn btn-sm btn-warning" data-auth="backstage_delete"  value="删除" onclick="Backstage.delete(' + id + ')"/>&nbsp;';
 
                 if(0==status){
-                    str += '<input type="button" class="control-auth btn btn-sm btn-danger" data-auth="backstage_changeStatus"  value="批准" onclick="Backstage.changeStatus(' + id +','+ 1 + ')"/>&nbsp;';
+                    str += '<input type="button" class="control-auth btn btn-sm btn-danger" data-auth="backstage_changeStatus"  value="批准" onclick="Backstage.acceptPre(' + id +','+ 1 + ')"/>&nbsp;';
                     str += '<input type="button" class="control-auth btn btn-sm btn-danger" data-auth="backstage_changeStatus"  value="拒绝" onclick="Backstage.changeStatus(' + id +','+ 2 +')"/>&nbsp;';
                 }else if (1==status){
                     str += '<input type="button" class="control-auth btn btn-sm btn-info" data-auth="backstage_createAction" value="新增Action" onclick="Backstage.createAction(' + id +')"/>&nbsp;';
@@ -151,6 +152,28 @@ Backstage.changeStatus = function del(id,status) {
             success("操作成功");
             Backstage.search();
         });
+};
+
+Backstage.acceptPre = function del(id,status) {
+    $("#ehsId").val(id);
+    $("#acceptModal").modal();
+};
+
+Backstage.accept = function del() {
+    var form = getFormJson($("#accept-form"));
+    console.log(form);
+    $.ajax({
+        type : 'POST',
+        url: '/backstage/accept',
+        contentType : "application/json" ,
+        data: JSON.stringify(form),
+        success : function() {
+            $("#acceptModal").modal("hide");
+            Backstage.search();
+            $("#accept-form")[0].reset();
+        }
+
+    })
 };
 
 /**

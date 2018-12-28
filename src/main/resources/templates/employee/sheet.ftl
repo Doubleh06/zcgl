@@ -72,7 +72,7 @@
 
 
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">涉及人员</label><span style="color: red">*</span>
+                            <label class="col-sm-2 control-label">涉及人员</label>
                             <div class="col-sm-10">
                                 <input id="accidentMan" type="text" class="form-control" name="accidentMan">
                             </div>
@@ -115,6 +115,12 @@
                             <label class="col-sm-2 control-label">汇报人</label><span style="color: red">*</span>
                             <div class="col-sm-10">
                                 <input id="reportMan" type="text" class="form-control" name="reportMan">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">汇报人工号</label><span style="color: red">*</span>
+                            <div class="col-sm-10">
+                                <input id="workNum" type="text" class="form-control" name="workNum">
                             </div>
                         </div>
 

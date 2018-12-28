@@ -103,6 +103,38 @@
 
 <#--分配角色弹框-->
 <#include "/templates/layout/commonjs.ftl">
+<#--新增弹框-->
+<div class="modal fade" id="acceptModal" tabindex="-1"  role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="modalTitle">分配事故等级</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="accept-form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">事故等级</label>
+                        <div class="col-sm-10">
+                            <input id="ehsId" type="hidden" name="ehsId"/>
+                            <select class="form-control" id="accidentLevel" name="accidentLevel">
+                                <option value="">---请选择---</option>
+                                    <#list accidentLevels as accidentLevel>
+                                        <option value="${accidentLevel.id}">${accidentLevel.name}</option>
+                                    </#list>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-primary" onclick="Backstage.accept()">确定</button>
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
 <script src="/static/js/plugins/chosen/chosen.jquery.js"></script>
 <script src="/static/js/plugins/select2/select2.full.min.js"></script>
