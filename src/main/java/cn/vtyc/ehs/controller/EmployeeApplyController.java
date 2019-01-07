@@ -51,12 +51,14 @@ public class EmployeeApplyController extends BaseController {
     private Environment environment;
 
 
-    @RequestMapping(value = "remind")
+//    @RequestMapping(value = "remind")
+    @RequestMapping(value = "sheet")
     public String remind(Model model){
         return "/employee/remind";
     }
 
-    @RequestMapping(value = "sheet")
+//    @RequestMapping(value = "sheet")
+    @RequestMapping(value = "remind")
     public String list(Model model){
 
         model.addAttribute("depts",deptService.getAddressArray("CZ") );

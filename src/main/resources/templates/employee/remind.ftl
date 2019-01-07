@@ -54,7 +54,8 @@
 
         $(document).ready(function() {
             $("#jump").click(function () {
-                window.location.href="/employee/sheet";
+                window.location.href="/employee/remind";
+                // window.location.href="/employee/sheet";
             });
 
         });

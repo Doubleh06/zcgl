@@ -58,7 +58,8 @@ Sheet.insert = function () {
         contentType: "application/json",
         success: function (r) {
             if (r.code === 0) {
-                successthen("保存成功，请联系EHS主管-陆恺",null,"/employee/sheet")//"/createDemand/create");
+                // successthen("保存成功，请联系EHS主管-陆恺",null,"/employee/sheet")//"/createDemand/create");
+                successthen("保存成功，请联系EHS主管-陆恺",null,"/employee/remind")//"/createDemand/create");
             }
         },
         error: function () {
@@ -69,7 +70,8 @@ Sheet.insert = function () {
 
 
 Sheet.reset = function () {
-    window.location.href = "/employee/sheet";
+    window.location.href = "/employee/remind";
+    // window.location.href = "/employee/sheet";
 }
 
 $(function() {
