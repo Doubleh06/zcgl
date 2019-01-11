@@ -39,7 +39,7 @@
                 <h2 class="font-bold titleBox">温馨提醒：</h2>
                 <h3 class="font-bold titleBox">如果您使用的是苹果手机请按下方继续按钮</h3>
                 <br>
-                <h3 class="font-bold titleBox">如果您使用的是安卓手机请下载火狐浏览器，再继续使用</h3>
+                <h3 class="font-bold titleBox">如果您使用的是安卓手机，请勿用微信扫码，请下载火狐或其他浏览器，再继续使用</h3>
                 <div class="titleBox">
                     <button type="button" class="btn btn-sm btn-primary " id="jump" >继续</button>
                 </div>
