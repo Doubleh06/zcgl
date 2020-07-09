@@ -47,7 +47,5 @@ public class TZService extends AbstractService<Tz> {
         return new PageInfo<>(tzDao.selectTZ(sql.toString()));
     }
 
-    public void delete(Integer id){
 
-    }
 }
