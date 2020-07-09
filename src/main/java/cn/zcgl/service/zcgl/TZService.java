@@ -46,10 +46,8 @@ public class TZService extends AbstractService<Tz> {
         }
         return new PageInfo<>(tzDao.selectTZ(sql.toString()));
     }
-//
-//    public void delete(Integer id){
-//        AccidentLevel accidentLevel = new AccidentLevel();
-//        accidentLevel.setId(id);
-//        accidentLevelDao.delete(accidentLevel);
-//    }
+
+    public void delete(Integer id){
+
+    }
 }
