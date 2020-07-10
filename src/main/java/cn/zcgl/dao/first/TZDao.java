@@ -13,6 +13,9 @@ public interface TZDao extends BaseDao<Tz> {
     @Select("select * from tz ${sql}")
     List<Tz> selectTZ(@Param("sql") String sql);
 
+    @Select("select * from tz where type = ${type} and id = ${id} and is_delete = 0")
+    Tz selectDetail(@Param("id")Integer id ,@Param("type")Integer type);
+
 
 
 }

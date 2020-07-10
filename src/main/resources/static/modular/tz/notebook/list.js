@@ -13,7 +13,7 @@ Notebook.initOptions = function () {
         url : "/zcgl/tz/computers",
         autowidth:true,
         colNames:
-       ['序号','设备编码','规格型号','ＣＰＵ','内存','硬盘','操作系统','使用日期','一级部门','二级部门','使用人','购买价格','供应商','使用年限','现在残值','操作'],
+       ['序号','设备编码','规格型号','ＣＰＵ','内存','硬盘','使用日期','一级部门','二级部门','使用人','购买价格','使用年限','现在残值','操作'],
        // ['序号','设备编码','规格型号','ＣＰＵ','内存','硬盘','显示器大小','操作系统','数量','单位','使用日期','一级部门','二级部门','使用人','购买价格','供应商','使用年限','现在残值','维修记录','备注'],
         colModel: [
             {name: 'id', index: 'id', width: 15},
@@ -22,7 +22,6 @@ Notebook.initOptions = function () {
             {name: 'cpu', index: 'cpu', width: 30},
             {name: 'nc', index: 'nc', width: 20},
             {name: 'yp', index: 'yp', width: 30},
-            {name: 'czxt', index: 'czxt', width: 20},
             {name: 'syrq', index: 'syrq', width: 40,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
@@ -34,14 +33,13 @@ Notebook.initOptions = function () {
             {name: 'ejbm', index: 'ejbm', width: 30},
             {name: 'syr', index: 'syr', width: 30},
             {name: 'gmjg', index: 'gmjg', width: 30},
-            {name: 'gys', index: 'gys', width: 30},
             {name: 'synx', index: 'synx', width: 20},
             {name: 'xzcz', index: 'xzcz', width: 20},
-            {name: 'operations', index: 'operations', width:50 , sortable: false, formatter: function (cellValue, options, rowObject) {
+            {name: 'operations', index: 'operations', width:30 , sortable: false, formatter: function (cellValue, options, rowObject) {
                 var id = "'"+rowObject["id"]+"'";
                 var str = "";
-                    str += '<input type="button" class="btn btn-sm btn-warning"   value="编  辑" onclick="Notebook.preEdit(' + id +')"/>&nbsp;';
-                    str += '<input type="button" class="btn btn-sm btn-danger"   value="删  除" onclick="Notebook.delete(' + id +')"/>&nbsp;';
+                    str += '<input type="button" class="btn btn-sm btn-warning"   value="详  细" onclick="Notebook.detail(' + id +')"/>&nbsp;';
+
 
                 return str;
             }}
@@ -91,12 +89,12 @@ Notebook.delete = function del(id) {
 };
 
 /**
- * 编辑跳转
+ * 详细跳转
  *
  * @param id    userId
  */
-Notebook.preEdit = function (id) {
-    window.location.href = "/backstageApi/aboutUs/companyDynamics/preEdit?id=" + id;
+Notebook.detail = function (id) {
+    window.location.href = "/zcgl/tz/notebook/detail?id=" + id;
 };
 /**
  * 新增

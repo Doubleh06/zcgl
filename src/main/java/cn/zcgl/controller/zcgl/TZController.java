@@ -6,6 +6,8 @@ import cn.zcgl.controller.BaseController;
 import cn.zcgl.core.JSONResult;
 import cn.zcgl.core.Result;
 import cn.zcgl.core.jqGrid.JqGridResult;
+import cn.zcgl.dao.enumClass.TypeCode;
+import cn.zcgl.dao.first.TZDao;
 import cn.zcgl.dto.TZJqGridParam;
 import cn.zcgl.entity.zcgl.Tz;
 import cn.zcgl.service.zcgl.TZService;
@@ -14,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.jws.WebParam;
 
 
 @Controller
@@ -23,6 +28,8 @@ public class TZController extends BaseController {
 
     @Autowired
     private TZService tzService;
+    @Autowired
+    private TZDao tzDao;
 
     @RequestMapping(value = "/notebook")
     public String notebook(Model model) {
@@ -50,6 +57,12 @@ public class TZController extends BaseController {
         //当前页数据
         result.setRows(pageInfo.getList());
         return new JSONResult(result);
+    }
+    @RequestMapping(value = "/notebook/detail")
+    public String notebookDetail(Model model,@RequestParam Integer id) {
+        model.addAttribute("menus", getMenus("notebook"));
+        model.addAttribute("notebookDetail",tzDao.selectDetail(id, TypeCode.Computer_notebook.code()));
+        return "/tz/notebook/detail";
     }
 
 }
